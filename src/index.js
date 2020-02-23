@@ -1,25 +1,20 @@
 import 'react-native-gesture-handler';
 
-import React, { Component } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import logger from 'redux-logger'
+
 import reducers from './ducks/reducers'
 import Routes from './routes'
 
-const store = createStore(reducers);
+const store = createStore(reducers, applyMiddleware(logger, thunk));
 
-class App extends Component {
-  handlePress = () => {
-    console.warn('opa');
-  };
-
-  render() {
-    return (
-      <Provider store={store}>
-        <Routes />
-      </Provider>
-    );
-  }
-}
+const App = () => (
+  <Provider store={store}>
+    <Routes />
+  </Provider>
+);
 
 export default App;

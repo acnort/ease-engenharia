@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 
 import {
   View,
@@ -8,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { addName } from '../../ducks/Home';
+import * as homeActions from '../../ducks/Home';
 
 import Container from '../../components/Container'
 import styles from './styles'
@@ -18,7 +19,7 @@ class Home extends Component {
     const { addName } = this.props
 
     addName('Andre')
-  };
+  }
 
   render() {
     return (
@@ -33,22 +34,26 @@ class Home extends Component {
           </TouchableOpacity>
         </View>
       </Container>
-    );
+    )
   }
 }
 
-const mapStateToProps = (state) => {
-  const { friends } = state
+Home.propTypes = {
+  addName: PropTypes.func
+}
 
-  return {
-    friends,
-  }
-};
+const mapStateToProps = ({ friends }) => ({
+  friends
+})
 
-const mapDispatchToProps = (dispatch) => (
-  bindActionCreators({
-    addName,
-  }, dispatch)
-);
+const mapDispatchToProps = (dispatch) => {
+  const { addName } = homeActions
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+  return (
+    bindActionCreators({
+      addName,
+    }, dispatch)
+  )
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

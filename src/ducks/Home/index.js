@@ -5,7 +5,6 @@ const INITIAL_STATE = {
 };
 
 const homeReducer = (state = INITIAL_STATE, action) => {
-  console.warn(state, action)
   switch (action.type) {
     case 'ADD_NAME':
       return {
