@@ -1,4 +1,4 @@
-import api from '../../api'
+import { baseURL } from '../../api'
 
 const ADD_USER = 'ADD_USER'
 const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS'
@@ -20,7 +20,7 @@ const homeReducer = (state = INITIAL_STATE, action) => {
         ...state,
         users: [
           ...state.users,
-          action.payload
+          action.payload.data.name
         ],
       }
 
@@ -35,30 +35,24 @@ const homeReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-const addUserSuccess = (user) => (
+const addUserAction = (user) => (
   {
-    type: ADD_USER_SUCCESS,
-    payload: user
+    type: ADD_USER,
+    payload: {
+      user
+    },
+    meta: {
+      offline: {
+        effect: { url: `${baseURL}/users/${user}`, method: 'GET' },
+        commit: { type: ADD_USER_SUCCESS },
+        rollback: { type: ADD_USER_ERROR }
+      }
+    }
   }
-);
+)
 
-const addUserError = (error) => (
-  {
-    type: ADD_USER_ERROR,
-    error
-  }
-);
-
-export const addUser = () => (dispatch) => {
-  dispatch({ type: ADD_USER })
-
-  api.get('users/arojunior')
-    .then((resp) => {
-      dispatch(addUserSuccess(resp.data.name))
-    })
-    .catch((error) => {
-      dispatch(addUserError(error))
-    })
+export const addUser = (user) => (dispatch) => {
+  dispatch(addUserAction(user));
 }
 
 

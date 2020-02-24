@@ -18,7 +18,7 @@ class Home extends Component {
   handlePress = () => {
     const { addUser } = this.props
 
-    addUser()
+    addUser('arojunior')
   }
 
   render() {
