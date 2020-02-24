@@ -16,9 +16,9 @@ import styles from './styles'
 
 class Home extends Component {
   handlePress = () => {
-    const { addName } = this.props
+    const { addUser } = this.props
 
-    addName('Andre')
+    addUser()
   }
 
   render() {
@@ -39,7 +39,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  addName: PropTypes.func
+  addUser: PropTypes.func
 }
 
 const mapStateToProps = ({ friends }) => ({
@@ -47,11 +47,11 @@ const mapStateToProps = ({ friends }) => ({
 })
 
 const mapDispatchToProps = (dispatch) => {
-  const { addName } = homeActions
+  const { addUser } = homeActions
 
   return (
     bindActionCreators({
-      addName,
+      addUser,
     }, dispatch)
   )
 }

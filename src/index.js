@@ -9,7 +9,7 @@ import logger from 'redux-logger'
 import reducers from './ducks/reducers'
 import Routes from './routes'
 
-const store = createStore(reducers, applyMiddleware(logger, thunk));
+const store = createStore(reducers, applyMiddleware(thunk, logger));
 
 const App = () => (
   <Provider store={store}>
