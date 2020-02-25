@@ -39,7 +39,6 @@ CREATE TABLE `construction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `client_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `service_number` int(11) DEFAULT 0,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -58,6 +57,7 @@ CREATE TABLE `construction_item_floor` (
 DROP TABLE IF EXISTS `report`;
 CREATE TABLE `report` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `service_number` int(11) DEFAULT 0,
   `pdf` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `word` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
