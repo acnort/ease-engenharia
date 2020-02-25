@@ -38,9 +38,8 @@ DROP TABLE IF EXISTS `construction`;
 CREATE TABLE `construction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `client_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `service_number` int(11) DEFAULT 0,
-  `report_date` timestamp NULL DEFAULT NULL,
-  `observation` text COLLATE utf8_unicode_ci,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -54,4 +53,22 @@ CREATE TABLE `construction_item_floor` (
   CONSTRAINT `fk_item` FOREIGN KEY (`id_item`) REFERENCES `item` (`id`),
   CONSTRAINT `fk_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`),
   CONSTRAINT `fk_floor` FOREIGN KEY (`id_floor`) REFERENCES `floor` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `report`;
+CREATE TABLE `report` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pdf` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `word` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `construction_report`;
+CREATE TABLE `construction_report` (
+  `id_construction` int(11) NOT NULL,
+  `id_report` int(11) NOT NULL,
+  PRIMARY KEY (`id_construction`, `id_report`) USING BTREE,
+  CONSTRAINT `fk_cr_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`),
+  CONSTRAINT `fk_cr_report` FOREIGN KEY (`id_report`) REFERENCES `report` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
