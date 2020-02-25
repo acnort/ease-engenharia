@@ -43,15 +43,22 @@ CREATE TABLE `construction` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `construction_item_floor`;
-CREATE TABLE `construction_item_floor` (
+DROP TABLE IF EXISTS `construction_floor`;
+CREATE TABLE `construction_floor` (
   `id_construction` int(11) NOT NULL,
   `id_floor` int(11) NOT NULL,
+  PRIMARY KEY (`id_construction`, `id_floor`) USING BTREE,
+  CONSTRAINT `fk_cf_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_cf_floor` FOREIGN KEY (`id_floor`) REFERENCES `floor` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `floor_item`;
+CREATE TABLE `floor_item` (
+  `id_floor` int(11) NOT NULL,
   `id_item` int(11) NOT NULL,
-  PRIMARY KEY (`id_construction`, `id_floor`, `id_item`) USING BTREE,
-  CONSTRAINT `fk_item` FOREIGN KEY (`id_item`) REFERENCES `item` (`id`),
-  CONSTRAINT `fk_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`),
-  CONSTRAINT `fk_floor` FOREIGN KEY (`id_floor`) REFERENCES `floor` (`id`)
+  PRIMARY KEY (`id_floor`, `id_item`) USING BTREE,
+  CONSTRAINT `fk_fi_item` FOREIGN KEY (`id_item`) REFERENCES `item` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_fi_floor` FOREIGN KEY (`id_floor`) REFERENCES `floor` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `report`;
@@ -69,6 +76,6 @@ CREATE TABLE `construction_report` (
   `id_construction` int(11) NOT NULL,
   `id_report` int(11) NOT NULL,
   PRIMARY KEY (`id_construction`, `id_report`) USING BTREE,
-  CONSTRAINT `fk_cr_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`),
-  CONSTRAINT `fk_cr_report` FOREIGN KEY (`id_report`) REFERENCES `report` (`id`)
+  CONSTRAINT `fk_cr_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_cr_report` FOREIGN KEY (`id_report`) REFERENCES `report` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
