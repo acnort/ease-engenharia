@@ -79,3 +79,44 @@ CREATE TABLE `construction_report` (
   CONSTRAINT `fk_cr_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_cr_report` FOREIGN KEY (`id_report`) REFERENCES `report` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+COMMENT 'Procedure'
+USE `easiengenharia`;
+DROP procedure IF EXISTS `user_add_or_edit`;
+
+DELIMITER $$
+USE `easiengenharia`$$
+CREATE PROCEDURE `user_add_or_edit` (
+	IN _id INT,
+    IN _name varchar(255),
+    IN _email varchar(255),
+    IN _password varchar(255),
+    IN _last_access datetime,
+    IN _admin tinyint(1),
+    IN _online tinyint(1)
+)
+BEGIN
+	IF _id = 0 THEN
+		INSERT INTO user(`name`, `email`, `password`, `registered`, `last_access`, `admin`, `online`, `created`, `update`, `deleted`)
+        VALUES (_name, _email, _password, CURRENT_TIME(), _last_access, _admin, _online, CURRENT_TIME(), CURRENT_TIME(), null);
+        
+        SET _id = LAST_INSERT_ID();
+	ELSE
+		UPDATE user
+        SET 
+        `name` = _name,
+        `email` = _email,
+        `password` = _password,
+        `last_access` = _last_access,
+        `admin` = _admin,
+        `online` = _online,
+        `update` = CURRENT_TIME()
+        WHERE `id` = _id;
+	END IF;
+    
+    SELECT _id AS 'id';
+END$$
+
+DELIMITER ;
+
+
