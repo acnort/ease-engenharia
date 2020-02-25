@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import * as homeActions from '../../ducks/Home';
+import * as userActions from '../../ducks/User';
 
 import Container from '../../components/Container'
 import styles from './styles'
@@ -42,12 +42,12 @@ Home.propTypes = {
   addUser: PropTypes.func
 }
 
-const mapStateToProps = ({ friends }) => ({
-  friends
+const mapStateToProps = ({ user }) => ({
+  user
 })
 
 const mapDispatchToProps = (dispatch) => {
-  const { addUser } = homeActions
+  const { addUser } = userActions
 
   return (
     bindActionCreators({
