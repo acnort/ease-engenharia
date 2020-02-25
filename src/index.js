@@ -8,10 +8,10 @@ import logger from 'redux-logger'
 
 import { offline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
-import { effect, discard } from './api'
+import { effect, discard } from '~/api'
 
-import reducers from './ducks/reducers'
-import Routes from './routes'
+import reducers from '~/ducks/reducers'
+import Routes from '~/routes'
 
 const store = createStore(
   reducers,

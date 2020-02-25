@@ -11,5 +11,13 @@ module.exports = {
     'jsx-quotes': 'off',
     'comma-dangle': 'off',
     'semi': 'off'
+  },
+  'settings': {
+    'import/resolver': {
+      'babel-plugin-root-import': {
+        'rootPathPrefix': '~',
+        'rootPathSuffix': 'src'
+      }
+    }
   }
 };

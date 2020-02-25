@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import * as userActions from '../../ducks/User';
+import * as userActions from '~/ducks/User';
 
-import Container from '../../components/Container'
+import Container from '~/components/Container'
 import styles from './styles'
 
 class Home extends Component {

@@ -1,4 +1,4 @@
-import { baseURL } from '../../api'
+import { baseURL } from '~/api'
 
 const ADD_USER = 'ADD_USER'
 const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS'
