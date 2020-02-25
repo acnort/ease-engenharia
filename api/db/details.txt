@@ -1,0 +1,24 @@
+App Ease
+- Funcionar Offline
+- Login
+    - Permissão (admin)
+- Obras
+    - Listagem de obras
+    - Cadastro de obra
+        - Nome do cliente
+        - Nome da obra
+        - Andares (inserir um por um)
+            - Edição dos nomes (pode começar com térreo, garagem, etc)
+    - Listagem de relatórios da obra (pode ter mais de um)
+        - Data
+        - Numero do serviço (manual)
+        - Edição
+        - Obs gerais
+        - Andar
+            - Fotos com legenda e observação
+            - OK ou NÃO OK (se está de acordo)
+            - Classificação de risco
+    - Gerar Relatório Word / PDF
+        - Enviar para email
+        - Cabeçalho padrão (fixo)
+        - Resumo da classificação de risco
