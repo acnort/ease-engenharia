@@ -4,13 +4,11 @@ CREATE TABLE `user` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `registered` timestamp NULL DEFAULT NULL,
   `last_access` datetime DEFAULT NULL,
   `admin` tinyint(1) DEFAULT '0',
   `online` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Flag para indicar se usuário está logado no sistema',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update` timestamp NULL DEFAULT NULL,
-  `deleted` timestamp NULL DEFAULT NULL,
    PRIMARY KEY (`id`),
    UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -97,8 +95,8 @@ CREATE PROCEDURE `user_add_or_edit` (
 )
 BEGIN
 	IF _id = 0 THEN
-		INSERT INTO user(`name`, `email`, `password`, `registered`, `last_access`, `admin`, `online`, `created`, `update`, `deleted`)
-        VALUES (_name, _email, _password, CURRENT_TIME(), _last_access, _admin, _online, CURRENT_TIME(), CURRENT_TIME(), null);
+		INSERT INTO user(`name`, `email`, `password`, `last_access`, `admin`, `online`, `created`, `update`)
+        VALUES (_name, _email, _password, _last_access, _admin, _online, CURRENT_TIME(), CURRENT_TIME());
         
         SET _id = LAST_INSERT_ID();
 	ELSE
