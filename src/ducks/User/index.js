@@ -10,7 +10,7 @@ const INITIAL_STATE = {
   ],
 };
 
-const homeReducer = (state = INITIAL_STATE, action) => {
+const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADD_USER:
       return { ...state }
@@ -56,4 +56,4 @@ export const addUser = (user) => (dispatch) => {
 }
 
 
-export default homeReducer
+export default userReducer

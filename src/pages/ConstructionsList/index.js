@@ -14,7 +14,7 @@ import * as userActions from '~/ducks/User';
 import Container from '~/components/Container'
 import styles from './styles'
 
-class Home extends Component {
+class ConstructionsList extends Component {
   handlePress = () => {
     const { addUser } = this.props
 
@@ -38,7 +38,7 @@ class Home extends Component {
   }
 }
 
-Home.propTypes = {
+ConstructionsList.propTypes = {
   addUser: PropTypes.func
 }
 
@@ -56,4 +56,4 @@ const mapDispatchToProps = (dispatch) => {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(ConstructionsList)
