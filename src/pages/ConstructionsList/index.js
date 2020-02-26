@@ -5,33 +5,40 @@ import PropTypes from 'prop-types';
 
 import {
   View,
-  Text,
-  TouchableOpacity,
+  Text
 } from 'react-native';
 
-import * as userActions from '~/ducks/User';
+import * as constructionActions from '~/ducks/Construction';
 
-import Container from '~/components/Container'
+import {
+  Container,
+  Constructions
+} from '~/components'
+
 import styles from './styles'
 
 class ConstructionsList extends Component {
-  handlePress = () => {
-    const { addUser } = this.props
+  componentDidMount() {
+    this.getConstructions()
+  }
 
-    addUser('arojunior')
+  getConstructions = async () => {
+    const { getConstructions } = this.props
+
+    try {
+      await getConstructions()
+    } catch (err) {
+      console.warn(err)
+    }
   }
 
   render() {
+    const { construction } = this.props
+
     return (
       <Container>
         <View style={styles.body}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.handlePress}
-            activeOpacity={3}
-          >
-            <Text style={styles.buttonText}>Ação</Text>
-          </TouchableOpacity>
+          <Constructions items={construction.list} />
         </View>
       </Container>
     )
@@ -39,19 +46,19 @@ class ConstructionsList extends Component {
 }
 
 ConstructionsList.propTypes = {
-  addUser: PropTypes.func
+  getConstructions: PropTypes.func
 }
 
-const mapStateToProps = ({ user }) => ({
-  user
+const mapStateToProps = ({ construction }) => ({
+  construction
 })
 
 const mapDispatchToProps = (dispatch) => {
-  const { addUser } = userActions
+  const { getConstructions } = constructionActions
 
   return (
     bindActionCreators({
-      addUser,
+      getConstructions,
     }, dispatch)
   )
 }

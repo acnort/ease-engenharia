@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
+import Colors from '~/utils/colors';
 
 const styles = StyleSheet.create({
-  engine: {
-    position: 'absolute',
-    right: 0,
+  safeAreaView: {
+    backgroundColor: Colors.white
   },
   content: {
     height: '100%',
+    backgroundColor: Colors.lightBg,
   },
   footer: {
     fontSize: 12,

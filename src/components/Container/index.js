@@ -8,30 +8,32 @@ import {
   StatusBar,
 } from 'react-native';
 
+import { Header } from '~/components'
+
 import styles from './styles'
 
 class Container extends Component {
-  handlePress = () => {
-    console.warn('opa');
-  };
-
   render() {
-    const { children } = this.props
+    const { children, hasScrollView } = this.props
+    console.warn(children)
     return (
       <>
         <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            contentContainerStyle={styles.content}
-          >
-            {global.HermesInternal == null ? null : (
-              <View style={styles.engine}>
-                <Text style={styles.footer}>Engine: Hermes</Text>
+        <SafeAreaView style={styles.safeAreaView}>
+          <Header />
+          {hasScrollView ? (
+            <ScrollView
+              contentInsetAdjustmentBehavior="automatic"
+              contentContainerStyle={styles.content}
+            >
+              {children}
+            </ScrollView>
+          )
+            : (
+              <View style={styles.content}>
+                {children}
               </View>
             )}
-            {children}
-          </ScrollView>
         </SafeAreaView>
       </>
     );

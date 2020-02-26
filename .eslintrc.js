@@ -10,7 +10,10 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'jsx-quotes': 'off',
     'comma-dangle': 'off',
-    'semi': 'off'
+    'semi': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react/forbid-prop-types': 'off',
+    'react/state-in-constructor': 'off'
   },
   'settings': {
     'import/resolver': {

@@ -13,8 +13,8 @@ export const screenOptions = ({ route }) => ({
         iconName = 'ios-list'
         break;
 
-      case 'Logout':
-        iconName = 'ios-exit'
+      case 'Configurações':
+        iconName = 'ios-cog'
         break;
 
       default:
