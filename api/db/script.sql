@@ -78,12 +78,6 @@ CREATE TABLE `construction_report` (
   CONSTRAINT `fk_cr_report` FOREIGN KEY (`id_report`) REFERENCES `report` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-COMMENT 'Procedure'
-USE `easiengenharia`;
-DROP procedure IF EXISTS `user_add_or_edit`;
-
-DELIMITER $$
-USE `easiengenharia`$$
 CREATE PROCEDURE `user_add_or_edit` (
 	IN _id INT,
     IN _name varchar(255),
@@ -113,8 +107,6 @@ BEGIN
 	END IF;
     
     SELECT _id AS 'id';
-END$$
-
-DELIMITER ;
+END
 
 
