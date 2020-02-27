@@ -1,8 +1,10 @@
 const express = require('express');
+const router = express.Router();
 const jwt = require('jsonwebtoken');
 const connection = require('../connection');
 
-app.post('/', (req, res, next) => {
+//Post user for login
+router.post('/', (req, res, next) => {
     let post = req.body;
 
     connection.query('SELECT * FROM user WHERE email = ? AND password = ?', [post.email, post.password], (error, rows, fields) =>{
@@ -12,7 +14,7 @@ app.post('/', (req, res, next) => {
                 res.status(200).send({ auth: true, token: token });
             }
             else{
-                res.status(500).send('Login inválido!');
+                res.status(500).send('Invalid login!');
             }
         }
         else{
@@ -22,3 +24,5 @@ app.post('/', (req, res, next) => {
         }
     });
 });
+
+module.exports = router;
