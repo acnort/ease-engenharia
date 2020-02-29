@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import PropTypes from 'prop-types';
+
 import {
   Text,
   FlatList,
@@ -11,7 +13,6 @@ import styles from './styles'
 class Constructions extends Component {
   renderItem = ({ item, index }) => (
     <TouchableOpacity
-      key={item.id}
       style={styles.listItem}
     >
       <Text>{`${item.name} ${index}`}</Text>
@@ -20,7 +21,7 @@ class Constructions extends Component {
 
 
   render() {
-    const { items, hasNextPage } = this.props
+    const { items } = this.props
 
     return (
       <>
@@ -28,10 +29,11 @@ class Constructions extends Component {
           <FlatList
             data={items}
             extraData={items}
+            keyExtractor={(item) => `${item.id}`}
             renderItem={this.renderItem}
             onEndReached={this.loadMore}
             onEndReachedThreshold={0.5}
-            ListFooterComponent={hasNextPage ? this.renderLoader : null}
+            // ListFooterComponent={hasNextPage ? this.renderLoader : null}
             ListFooterComponentStyle={{
               alignItems: 'center',
               justifyContent: 'center',
@@ -42,6 +44,10 @@ class Constructions extends Component {
       </>
     );
   }
+}
+
+Constructions.propTypes = {
+  items: PropTypes.array
 }
 
 export default Constructions;

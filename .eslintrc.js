@@ -13,7 +13,8 @@ module.exports = {
     'semi': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/forbid-prop-types': 'off',
-    'react/state-in-constructor': 'off'
+    'react/state-in-constructor': 'off',
+    'global-require': 'off'
   },
   'settings': {
     'import/resolver': {

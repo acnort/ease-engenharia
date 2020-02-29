@@ -4,8 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  View,
-  Text
+  View
 } from 'react-native';
 
 import * as constructionActions from '~/ducks/Construction';
@@ -46,7 +45,8 @@ class ConstructionsList extends Component {
 }
 
 ConstructionsList.propTypes = {
-  getConstructions: PropTypes.func
+  getConstructions: PropTypes.func,
+  construction: PropTypes.object
 }
 
 const mapStateToProps = ({ construction }) => ({
