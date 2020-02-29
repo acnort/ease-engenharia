@@ -6,7 +6,6 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL,
   `last_access` datetime DEFAULT NULL,
   `admin` tinyint(1) DEFAULT '0',
-  `online` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Flag para indicar se usuário está logado no sistema',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update` timestamp NULL DEFAULT NULL,
    PRIMARY KEY (`id`),
@@ -78,25 +77,18 @@ CREATE TABLE `construction_report` (
   CONSTRAINT `fk_cr_report` FOREIGN KEY (`id_report`) REFERENCES `report` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-COMMENT 'Procedure'
-USE `easiengenharia`;
-DROP procedure IF EXISTS `user_add_or_edit`;
-
-DELIMITER $$
-USE `easiengenharia`$$
 CREATE PROCEDURE `user_add_or_edit` (
 	IN _id INT,
     IN _name varchar(255),
     IN _email varchar(255),
     IN _password varchar(255),
     IN _last_access datetime,
-    IN _admin tinyint(1),
-    IN _online tinyint(1)
+    IN _admin tinyint(1)
 )
 BEGIN
 	IF _id = 0 THEN
-		INSERT INTO user(`name`, `email`, `password`, `last_access`, `admin`, `online`, `created`, `update`)
-        VALUES (_name, _email, _password, _last_access, _admin, _online, CURRENT_TIME(), CURRENT_TIME());
+		INSERT INTO user(`name`, `email`, `password`, `last_access`, `admin`, `created`, `update`)
+        VALUES (_name, _email, _password, _last_access, _admin, CURRENT_TIME(), CURRENT_TIME());
         
         SET _id = LAST_INSERT_ID();
 	ELSE
@@ -107,14 +99,11 @@ BEGIN
         `password` = _password,
         `last_access` = _last_access,
         `admin` = _admin,
-        `online` = _online,
         `update` = CURRENT_TIME()
         WHERE `id` = _id;
 	END IF;
     
     SELECT _id AS 'id';
-END$$
-
-DELIMITER ;
+END
 
 

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 const connection = require('../connection');
 
 //Get all users
@@ -48,7 +49,7 @@ router.delete('/:id', (req, res, next) =>{
 router.post('/', (req, res, next) => {
     let post = req.body;
 
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?, ?)', [0, post.name, post.email, post.password, null, post.admin, 0], (error, rows, fields) =>{
+    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [0, post.name, post.email, post.password, null, post.admin], (error, rows, fields) =>{
         if(!error){
             res.status(201).send(rows[0][0]);
         }
@@ -61,10 +62,10 @@ router.post('/', (req, res, next) => {
 });
 
 //Update an user
-router.put('/', (req, res, next) => {
+router.put('/', verifyToken, (req, res, next) => {
     let post = req.body;
     
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?, ?)', [post.id, post.name, post.email, post.password, null, post.admin, 0], (error, rows, fields) =>{
+    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [post.id, post.name, post.email, post.password, null, post.admin], (error, rows, fields) =>{
         if(!error){
             res.status(200).send('Updated successfully');
         }
@@ -75,5 +76,29 @@ router.put('/', (req, res, next) => {
         }
     });
 });
+
+//FORMAT OF TOKEN
+//Authorization: Bearer <access_token>
+
+function verifyToken(req, res, next) {
+    const bearerHeader = req.headers['authorization'];
+    if (typeof bearerHeader === 'undefined') { 
+        return res.status(401).send({ auth: false, message: 'No token provided.' }); 
+    }
+
+    const bearer = bearerHeader.split(' ');
+    const token = bearer[1];
+
+    jwt.verify(token, 'secretkey', function(error, decoded) {
+        if (error) { 
+            return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' }); 
+        }
+
+        // se tudo estiver ok, salva no request para uso posterior
+        req.userId = decoded.id;
+        req.token = token;
+        next();
+    });
+}
 
 module.exports = router;
