@@ -15,7 +15,9 @@ const styles = StyleSheet.create({
     flexBasis: '70%'
   },
   form: {
-    flexBasis: '30%'
+    flexBasis: '30%',
+    width: '100%',
+    alignItems: 'center'
   },
   background: {
     position: 'absolute',

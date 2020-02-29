@@ -131,8 +131,8 @@ class Login extends Component {
           resizeMode='contain'
         />
 
-        <Animated.View style={formAnimatedStyle}>
-          <LoginForm style={styles.form} />
+        <Animated.View style={[formAnimatedStyle, styles.form]}>
+          <LoginForm />
         </Animated.View>
       </View>
     )

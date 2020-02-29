@@ -4,8 +4,9 @@ import { withFormik } from 'formik';
 
 import {
   View,
+  Text,
   TextInput,
-  Button
+  TouchableOpacity
 } from 'react-native';
 
 import styles from './styles'
@@ -15,28 +16,31 @@ class LoginForm extends Component {
     const {
       values: { email, password },
       handleSubmit,
-      setFieldValue,
-      style
+      setFieldValue
     } = this.props
 
     return (
-      <View style={[style, styles.body]}>
-        <View style={styles.container}>
-          <TextInput
-            value={email}
-            onChangeText={(text) => setFieldValue('email', text)}
-          />
+      <View style={styles.wrapper}>
+        <TextInput
+          style={styles.input}
+          value={email}
+          placeholder='Email'
+          onChangeText={(text) => setFieldValue('email', text)}
+        />
 
-          <TextInput
-            value={password}
-            onChangeText={(text) => setFieldValue('password', text)}
-          />
+        <TextInput
+          style={styles.input}
+          value={password}
+          placeholder='Senha'
+          onChangeText={(text) => setFieldValue('password', text)}
+        />
 
-          <Button
-            onPress={handleSubmit}
-            title="Login"
-          />
-        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleSubmit}
+        >
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -45,12 +49,11 @@ class LoginForm extends Component {
 LoginForm.propTypes = {
   values: PropTypes.object,
   handleSubmit: PropTypes.func,
-  setFieldValue: PropTypes.func,
-  style: PropTypes.object
+  setFieldValue: PropTypes.func
 }
 
 export default withFormik({
-  mapPropsToValues: () => ({ email: 'oi', password: 'af' }),
+  mapPropsToValues: () => ({ email: '', password: '' }),
 
   handleSubmit: (values) => {
     console.log(values);
