@@ -12,10 +12,15 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: windowHeight / 8,
-    flexBasis: '70%'
+    height: '55%',
+    flexGrow: 0,
+    flexShrink: 0
   },
   form: {
-    flexBasis: '30%',
+    height: '45%',
+    flexGrow: 0,
+    flexShrink: 0,
+    marginTop: '15%',
     width: '100%',
     alignItems: 'center'
   },
@@ -23,7 +28,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: Colors.white,
     flex: 0,
-    top: '65%',
+    top: '55%',
     height: windowHeight * 1.2,
     width: windowHeight * 1.2,
     borderRadius: windowHeight * 1.2

@@ -6,11 +6,13 @@ import PropTypes from 'prop-types';
 import {
   View,
   Animated,
-  Dimensions
+  Dimensions,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import {
-  LoginForm
+  LoginForm,
+  DismissKeyboard
 } from '~/components'
 
 import styles from './styles'
@@ -65,7 +67,7 @@ class Login extends Component {
       transform: [{
         translateY: logoAnimation.interpolate({
           inputRange: [0, 1],
-          outputRange: [windowHeight / 8, 0]
+          outputRange: [windowHeight / 4, 0]
         })
       }]
     }
@@ -77,7 +79,6 @@ class Login extends Component {
     const backgroundAnimatedStyle = {
       opacity: backgroundAnimation,
       transform: [
-        { translateX: '-50%' },
         {
           translateY: backgroundAnimation.interpolate({
             inputRange: [0, 1],
@@ -93,7 +94,6 @@ class Login extends Component {
         outputRange: [0, 0.55]
       }),
       transform: [
-        { translateX: '-50%' },
         {
           translateY: backgroundAnimation2.interpolate({
             inputRange: [0, 1],
@@ -109,7 +109,6 @@ class Login extends Component {
         outputRange: [0, 0.55]
       }),
       transform: [
-        { translateX: '-50%' },
         {
           translateY: backgroundAnimation3.interpolate({
             inputRange: [0, 1],
@@ -120,21 +119,23 @@ class Login extends Component {
     }
 
     return (
-      <View style={styles.body}>
-        <Animated.View style={[styles.background, backgroundAnimatedStyle3]} />
-        <Animated.View style={[styles.background, backgroundAnimatedStyle2]} />
-        <Animated.View style={[styles.background, backgroundAnimatedStyle]} />
+      <DismissKeyboard>
+        <KeyboardAvoidingView style={styles.body} behavior="padding" enabled>
+          <Animated.View style={[styles.background, backgroundAnimatedStyle3]} />
+          <Animated.View style={[styles.background, backgroundAnimatedStyle2]} />
+          <Animated.View style={[styles.background, backgroundAnimatedStyle]} />
 
-        <Animated.Image
-          source={require('~/assets/img/ease.png')}
-          style={[styles.logo, logoAnimatedStyle]}
-          resizeMode='contain'
-        />
+          <Animated.Image
+            source={require('~/assets/img/ease.png')}
+            style={[styles.logo, logoAnimatedStyle]}
+            resizeMode='contain'
+          />
 
-        <Animated.View style={[formAnimatedStyle, styles.form]}>
-          <LoginForm />
-        </Animated.View>
-      </View>
+          <Animated.View style={[formAnimatedStyle, styles.form]}>
+            <LoginForm />
+          </Animated.View>
+        </KeyboardAvoidingView>
+      </DismissKeyboard>
     )
   }
 }
