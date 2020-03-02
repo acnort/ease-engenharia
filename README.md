@@ -14,6 +14,12 @@ Runs the app in iOS simulator.
 
 Runs the app in Android simulator.
 
-- [x] Finish my changes
-- [ ] Push my commits to GitHub
-- [ ] Open a pull request
+Tasks in API
+- [x] Criação e configuração de API
+- [x] Criar rotas/controlers
+- [x] Login e verificação de autenticação para requisições (retorno no login { auth: true, userId: 1, token: token})
+- [x] CRUD e rotas do Usuário
+- [ ] CRUD e rotas das Obras
+- [ ] CRUD e rotas dos Andares
+- [ ] CRUD e rotas dos Relatórios
+- [ ] Salvar imagem na storage (qual storage?)
