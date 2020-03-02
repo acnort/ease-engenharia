@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken');
 const connection = require('../connection');
 
 //Get all users
-router.get('/', (req, res, next) =>{
-    connection.query('SELECT * FROM user', (error, rows, fields) =>{
-        if(!error){
+router.get('/', verifyToken, (req, res, next) => {
+    connection.query('SELECT * FROM user', (error, rows, fields) => {
+        if (!error) {
             res.status(200).send(rows);
         }
-        else{
+        else {
             console.log(error);
             res.send(error);
             next();
@@ -18,12 +18,12 @@ router.get('/', (req, res, next) =>{
 });
 
 //Get user by id
-router.get('/:id', (req, res, next) =>{
-    connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (error, rows, fields) =>{
-        if(!error){
+router.get('/:id', verifyToken, (req, res, next) => {
+    connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
+        if (!error) {
             res.status(200).send(rows);
         }
-        else{
+        else {
             console.log(error);
             res.send(error);
             next();
@@ -32,12 +32,12 @@ router.get('/:id', (req, res, next) =>{
 });
 
 //Delete user by id
-router.delete('/:id', (req, res, next) =>{
-    connection.query('DELETE FROM user WHERE id = ?', [req.params.id], (error, rows, fields) =>{
-        if(!error){
+router.delete('/:id', verifyToken, (req, res, next) => {
+    connection.query('DELETE FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
+        if (!error) {
             res.status(200).send('Deleted successfully.');
         }
-        else{
+        else {
             console.log(error);
             res.status(500).send(error);
             next();
@@ -46,14 +46,14 @@ router.delete('/:id', (req, res, next) =>{
 });
 
 //Insert an user
-router.post('/', (req, res, next) => {
+router.post('/', verifyToken, (req, res, next) => {
     let post = req.body;
 
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [0, post.name, post.email, post.password, null, post.admin], (error, rows, fields) =>{
-        if(!error){
+    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [0, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
+        if (!error) {
             res.status(201).send(rows[0][0]);
         }
-        else{
+        else {
             console.log(error);
             res.status(500).send(error);
             next();
@@ -64,12 +64,12 @@ router.post('/', (req, res, next) => {
 //Update an user
 router.put('/', verifyToken, (req, res, next) => {
     let post = req.body;
-    
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [post.id, post.name, post.email, post.password, null, post.admin], (error, rows, fields) =>{
-        if(!error){
+
+    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [post.id, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
+        if (!error) {
             res.status(200).send('Updated successfully');
         }
-        else{
+        else {
             console.log(error);
             res.status(500).send(error);
             next();
@@ -82,16 +82,16 @@ router.put('/', verifyToken, (req, res, next) => {
 
 function verifyToken(req, res, next) {
     const bearerHeader = req.headers['authorization'];
-    if (typeof bearerHeader === 'undefined') { 
-        return res.status(401).send({ auth: false, message: 'No token provided.' }); 
+    if (typeof bearerHeader === 'undefined') {
+        return res.status(401).send({ auth: false, message: 'No token provided.' });
     }
 
     const bearer = bearerHeader.split(' ');
     const token = bearer[1];
 
-    jwt.verify(token, 'secretkey', function(error, decoded) {
-        if (error) { 
-            return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' }); 
+    jwt.verify(token, 'secretkey', function (error, decoded) {
+        if (error) {
+            return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
         }
 
         // se tudo estiver ok, salva no request para uso posterior
