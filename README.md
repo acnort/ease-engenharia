@@ -13,3 +13,7 @@ Runs the app in iOS simulator.
 ### `npx react-native run-android`
 
 Runs the app in Android simulator.
+
+- [x] Finish my changes
+- [ ] Push my commits to GitHub
+- [ ] Open a pull request
