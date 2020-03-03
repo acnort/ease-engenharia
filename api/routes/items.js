@@ -5,7 +5,7 @@ const authService = require('../services/auth-service');
 
 //Get items by floorId
 router.get('/floor/:id', authService.verifyToken, (req, res, next) => {
-    const query = 'SELECT * FROM item WHERE florId = ?';
+    const query = 'SELECT * FROM item WHERE floorId = ?';
 
     connection.query(query, (error, rows, fields) => {
         if (!error) {
