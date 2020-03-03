@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const connection = require('../connection');
 const authService = require('../services/auth-service');
 
@@ -48,7 +47,7 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 
 //Insert an user
 router.post('/', authService.verifyToken, (req, res, next) => {
-    let post = req.body;
+    const post = req.body;
 
     connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [0, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
         if (!error) {
@@ -64,7 +63,7 @@ router.post('/', authService.verifyToken, (req, res, next) => {
 
 //Update an user
 router.put('/', authService.verifyToken, (req, res, next) => {
-    let post = req.body;
+    const post = req.body;
 
     connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [post.id, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
         if (!error) {

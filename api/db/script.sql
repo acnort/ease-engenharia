@@ -7,7 +7,7 @@ CREATE TABLE `user` (
   `last_access` datetime DEFAULT NULL,
   `admin` tinyint(1) DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`),
    UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -18,6 +18,7 @@ CREATE TABLE `construction` (
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `client_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -29,6 +30,7 @@ CREATE TABLE `report` (
   `pdf` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `word` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   CONSTRAINT `fk_r_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -39,6 +41,7 @@ CREATE TABLE `floor` (
   `id_construction` int(11) NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   CONSTRAINT `fk_f_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -52,6 +55,7 @@ CREATE TABLE `item` (
   `rating` tinyint(4) DEFAULT '0',
   `image` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   CONSTRAINT `fk_i_floor` FOREIGN KEY (`id_floor`) REFERENCES `floor` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -75,7 +79,7 @@ CREATE PROCEDURE `user_add_or_edit` (
 )
 BEGIN
 	IF _id = 0 THEN
-		INSERT INTO user(`name`, `email`, `password`, `last_access`, `admin`, `created`, `update`)
+		INSERT INTO user(`name`, `email`, `password`, `last_access`, `admin`, `created`, `updated`)
         VALUES (_name, _email, _password, _last_access, _admin, CURRENT_TIME(), CURRENT_TIME());
         
         SET _id = LAST_INSERT_ID();
@@ -87,7 +91,7 @@ BEGIN
         `password` = _password,
         `last_access` = _last_access,
         `admin` = _admin,
-        `update` = CURRENT_TIME()
+        `updated` = CURRENT_TIME()
         WHERE `id` = _id;
 	END IF;
     
