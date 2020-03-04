@@ -71,7 +71,7 @@ router.post('/', authService.verifyToken, (req, res, next) => {
 //Update an items
 router.put('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
-    const query = 'UPDATE item SET `id_floor` = ?, `title` = ?, `observation` = ?, `rating` = ?, `image` = ?, `created` = ?) WHERE id = ?';
+    const query = 'UPDATE item SET `id_floor` = ?, `title` = ?, `observation` = ?, `rating` = ?, `image` = ?, `created` = ? WHERE id = ?';
 
     let image = '';
 

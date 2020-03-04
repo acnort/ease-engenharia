@@ -45,4 +45,41 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
     });
 });
 
+//Insert an constructions
+router.post('/', authService.verifyToken, (req, res, next) => {
+    const post = req.body;
+    const query = 'INSERT INTO construction(`title`, `client_name`, `created`) VALUES (?, ?, ?)';
+    
+    const data = new Date();
+    const created = new Date(data.valueOf() - data.getTimezoneOffset() * 60000).toISOString().slice(0, 19).replace('T', ' ');
+
+    connection.query(query, [post.title, post.client_name, created], (error, rows, fields) => {
+        if (!error) {
+            res.status(201).send({ id: rows.insertId });
+        }
+        else {
+            console.log(error);
+            res.status(500).send(error);
+            next();
+        }
+    });
+});
+
+//Update an constructions
+router.put('/', authService.verifyToken, (req, res, next) => {
+    const post = req.body;
+    const query = 'UPDATE construction SET `title` = ?, `client_name` = ? WHERE id = ?';
+
+    connection.query(query, [post.title, post.client_name, post.id], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send('Updated successfully');
+        }
+        else {
+            console.log(error);
+            res.status(500).send(error);
+            next();
+        }
+    });
+});
+
 module.exports = router;
