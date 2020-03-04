@@ -70,9 +70,13 @@ router.put('/', authService.verifyToken, (req, res, next) => {
     const updated = dateUtils.getCurrentDate();
     const query = 'UPDATE construction SET `title` = ?, `client_name` = ?, `updated` = ? WHERE id = ?';
 
+    if(!post.id){
+        return res.status(500).send({ message: "Id undefined" });
+    }
+
     connection.query(query, [post.title, post.clientName, updated, post.id], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send('Updated successfully');
+            res.status(200).send({ message: 'Updated successfully' });
         }
         else {
             console.log(error);
