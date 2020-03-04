@@ -82,7 +82,6 @@ router.put('/', authService.verifyToken, (req, res, next) => {
 
     connection.query(query, [post.title, post.observation, post.rating, post.image, updated, post.id], (error, rows, fields) => {
         if (!error) {
-            console.log(rows);
             res.status(200).send({ message: 'Updated successfully' });
         }
         else {
