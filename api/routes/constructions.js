@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../connection');
 const authService = require('../services/auth-service');
+const dateUtils = require('../utils/date-utils');
 
 //Get all constructions
 router.get('/', authService.verifyToken, (req, res, next) => {
@@ -48,12 +49,10 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 //Insert an constructions
 router.post('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
+    const created = dateUtils.getCurrentDate();
     const query = 'INSERT INTO construction(`title`, `client_name`, `created`) VALUES (?, ?, ?)';
-    
-    const data = new Date();
-    const created = new Date(data.valueOf() - data.getTimezoneOffset() * 60000).toISOString().slice(0, 19).replace('T', ' ');
 
-    connection.query(query, [post.title, post.client_name, created], (error, rows, fields) => {
+    connection.query(query, [post.title, post.clientName, created], (error, rows, fields) => {
         if (!error) {
             res.status(201).send({ id: rows.insertId });
         }
@@ -68,9 +67,10 @@ router.post('/', authService.verifyToken, (req, res, next) => {
 //Update an constructions
 router.put('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
-    const query = 'UPDATE construction SET `title` = ?, `client_name` = ? WHERE id = ?';
+    const updated = dateUtils.getCurrentDate();
+    const query = 'UPDATE construction SET `title` = ?, `client_name` = ?, `updated` = ? WHERE id = ?';
 
-    connection.query(query, [post.title, post.client_name, post.id], (error, rows, fields) => {
+    connection.query(query, [post.title, post.clientName, updated, post.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Updated successfully');
         }
