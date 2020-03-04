@@ -3,9 +3,9 @@ const router = express.Router();
 const connection = require('../connection');
 const authService = require('../services/auth-service');
 
-//Get all users
+//Get all constructions
 router.get('/', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT * FROM user', (error, rows, fields) => {
+    connection.query('SELECT * FROM construction', (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
@@ -17,9 +17,9 @@ router.get('/', authService.verifyToken, (req, res, next) => {
     })
 });
 
-//Get user by id
+//Get construction by id
 router.get('/:id', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
+    connection.query('SELECT * FROM construction WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
@@ -31,9 +31,9 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
     });
 });
 
-//Delete user by id
+//Delete construction by id
 router.delete('/:id', authService.verifyToken, (req, res, next) => {
-    connection.query('DELETE FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
+    connection.query('DELETE FROM construction WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Deleted successfully.');
         }
@@ -45,13 +45,17 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
     });
 });
 
-//Insert an user
+//Insert an constructions
 router.post('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
+    const query = 'INSERT INTO construction(`title`, `client_name`, `created`) VALUES (?, ?, ?)';
+    
+    const data = new Date();
+    const created = new Date(data.valueOf() - data.getTimezoneOffset() * 60000).toISOString().slice(0, 19).replace('T', ' ');
 
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [0, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
+    connection.query(query, [post.title, post.client_name, created], (error, rows, fields) => {
         if (!error) {
-            res.status(201).send(rows[0][0]);
+            res.status(201).send({ id: rows.insertId });
         }
         else {
             console.log(error);
@@ -61,11 +65,12 @@ router.post('/', authService.verifyToken, (req, res, next) => {
     });
 });
 
-//Update an user
+//Update an constructions
 router.put('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
+    const query = 'UPDATE construction SET `title` = ?, `client_name` = ? WHERE id = ?';
 
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [post.id, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
+    connection.query(query, [post.title, post.client_name, post.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Updated successfully');
         }

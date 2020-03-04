@@ -3,9 +3,11 @@ const router = express.Router();
 const connection = require('../connection');
 const authService = require('../services/auth-service');
 
-//Get all users
-router.get('/', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT * FROM user', (error, rows, fields) => {
+//Get items by floorId
+router.get('/floor/:id', authService.verifyToken, (req, res, next) => {
+    const query = 'SELECT * FROM item WHERE floorId = ?';
+
+    connection.query(query, (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
@@ -17,9 +19,11 @@ router.get('/', authService.verifyToken, (req, res, next) => {
     })
 });
 
-//Get user by id
+//Get item by id
 router.get('/:id', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
+    const query = 'SELECT * FROM item WHERE id = ?';
+
+    connection.query(query, [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
@@ -31,9 +35,9 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
     });
 });
 
-//Delete user by id
+//Delete item by id
 router.delete('/:id', authService.verifyToken, (req, res, next) => {
-    connection.query('DELETE FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
+    connection.query('DELETE FROM item WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Deleted successfully.');
         }
@@ -45,11 +49,14 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
     });
 });
 
-//Insert an user
+//Insert an items
 router.post('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
+    const query = 'INSERT INTO item(`id_floor`, `title`, `observation`, `rating`, `image`, `created`) VALUES (?, ?, ?, ?, ?, ?)';
 
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [0, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
+    let image = '';
+
+    connection.query(query, [post.floorId, post.title, post.observation, post.rating, image, Date.now()], (error, rows, fields) => {
         if (!error) {
             res.status(201).send(rows[0][0]);
         }
@@ -61,11 +68,14 @@ router.post('/', authService.verifyToken, (req, res, next) => {
     });
 });
 
-//Update an user
+//Update an items
 router.put('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
+    const query = 'UPDATE item SET `id_floor` = ?, `title` = ?, `observation` = ?, `rating` = ?, `image` = ?, `created` = ? WHERE id = ?';
 
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [post.id, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
+    let image = '';
+
+    connection.query(query, [post.floorId, post.title, post.observation, post.rating, image, Date.now(), post.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Updated successfully');
         }
