@@ -39,3 +39,30 @@ Many API endpoints return the JSON representation of the resources created or ed
   "message" : string
 }
 ```
+
+## Login
+
+* **URL**
+
+```http
+POST /login
+```
+
+* **Data Params**
+
+```javascript
+{
+  "email": string,
+  "password": string
+}
+```
+
+* **Response**
+
+```javascript
+{
+  "auth": boolean,
+  "userId": number,
+  "token": string
+}
+```
