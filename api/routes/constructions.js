@@ -11,8 +11,7 @@ router.get('/', authService.verifyToken, (req, res, next) => {
             res.status(200).send(rows);
         }
         else {
-            console.log(error);
-            res.send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     })
@@ -25,8 +24,7 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
             res.status(200).send(rows);
         }
         else {
-            console.log(error);
-            res.send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -41,8 +39,7 @@ router.get('/:id/floors', authService.verifyToken, (req, res, next) => {
             res.status(200).send(rows);
         }
         else {
-            console.log(error);
-            res.send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     })
@@ -57,8 +54,7 @@ router.get('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
             res.status(200).send(rows);
         }
         else {
-            console.log(error);
-            res.send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -73,8 +69,7 @@ router.get('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (req, 
             res.status(200).send(rows);
         }
         else {
-            console.log(error);
-            res.send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -89,8 +84,7 @@ router.get('/:id/floors/:floorId/items', authService.verifyToken, (req, res, nex
             res.status(200).send(rows);
         }
         else {
-            console.log(error);
-            res.send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     })
@@ -103,8 +97,7 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
             res.status(200).send('Deleted successfully.');
         }
         else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -117,8 +110,7 @@ router.delete('/:id/floors/:floorId', authService.verifyToken, (req, res, next) 
             res.status(200).send('Deleted successfully.');
         }
         else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -131,8 +123,7 @@ router.delete('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (re
             res.status(200).send('Deleted successfully.');
         }
         else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -149,8 +140,7 @@ router.post('/', authService.verifyToken, (req, res, next) => {
             res.status(201).send({ id: rows.insertId });
         }
         else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -167,8 +157,7 @@ router.post('/:id/floors', authService.verifyToken, (req, res, next) => {
             res.status(201).send({ id: rows.insertId });
         }
         else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -187,8 +176,7 @@ router.post('/:id/floors/:floorId/items', authService.verifyToken, (req, res, ne
             res.status(201).send({ id: rows.insertId });
         }
         else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -209,8 +197,7 @@ router.put('/:id', authService.verifyToken, (req, res, next) => {
             res.status(200).send({ message: 'Updated successfully' });
         }
         else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -231,8 +218,7 @@ router.put('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
             res.status(200).send({ message: 'Updated successfully' });
         }
         else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
@@ -253,8 +239,7 @@ router.put('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (req, 
             res.status(200).send({ message: 'Updated successfully' });
         }
         else {
-            console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ "message": error.sqlMessage });
             next();
         }
     });
