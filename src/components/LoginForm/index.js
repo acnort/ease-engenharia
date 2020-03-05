@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
+import { Formik } from 'formik';
 
 import {
   View,
@@ -14,48 +14,49 @@ import styles from './styles'
 class LoginForm extends Component {
   render() {
     const {
-      values: { email, password },
-      handleSubmit,
-      setFieldValue
+      onSubmit
     } = this.props
 
     return (
-      <View style={styles.wrapper}>
-        <TextInput
-          style={styles.input}
-          value={email}
-          placeholder='Email'
-          onChangeText={(text) => setFieldValue('email', text)}
-        />
+      <Formik
+        initialValues={{ email: '', password: '' }}
+        onSubmit={(values) => onSubmit(values)}
+      >
+        {({ handleChange, handleSubmit, values }) => (
+          <View style={styles.wrapper}>
+            <TextInput
+              style={styles.input}
+              value={values.email}
+              placeholder='Email'
+              textContentType='emailAddress'
+              keyboardType='email-address'
+              onChangeText={handleChange('email')}
+            />
 
-        <TextInput
-          style={styles.input}
-          value={password}
-          placeholder='Senha'
-          onChangeText={(text) => setFieldValue('password', text)}
-        />
+            <TextInput
+              style={styles.input}
+              value={values.password}
+              placeholder='Senha'
+              textContentType='password'
+              secureTextEntry
+              onChangeText={handleChange('password')}
+            />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </Formik>
     )
   }
 }
 
 LoginForm.propTypes = {
-  values: PropTypes.object,
-  handleSubmit: PropTypes.func,
-  setFieldValue: PropTypes.func
+  onSubmit: PropTypes.func
 }
 
-export default withFormik({
-  mapPropsToValues: () => ({ email: '', password: '' }),
-
-  handleSubmit: (values) => {
-    console.log(values);
-  }
-})(LoginForm)
+export default LoginForm

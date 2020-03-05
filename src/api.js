@@ -5,11 +5,17 @@ export const discard = (error, _action, _retries) => {
   const { request, response } = error;
   if (!request) throw error; // There was an error creating the request
   if (!response) return false; // There was no response
-  return 400 <= response.status && response.status < 500;
+  return response.status >= 400 && response.status < 500;
 };
 
-export const baseURL = 'https://api.github.com'
+export const baseURL = 'http://192.168.0.4:3000'
 
 export default axios.create({
-  baseURL
+  baseURL,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': '*',
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  }
 })

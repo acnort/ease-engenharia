@@ -7,13 +7,16 @@ import {
   View,
   Animated,
   Dimensions,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Keyboard
 } from 'react-native';
 
 import {
   LoginForm,
   DismissKeyboard
 } from '~/components'
+
+import * as userActions from '~/ducks/User'
 
 import styles from './styles'
 
@@ -50,6 +53,14 @@ class Login extends Component {
       useNativeDriver: true
     })
   )
+
+  onSubmit = (values) => {
+    const { login } = this.props
+
+    login(values)
+
+    Keyboard.dismiss()
+  }
 
   render() {
     const {
@@ -95,9 +106,12 @@ class Login extends Component {
       }),
       transform: [
         {
+          translateX: -30,
+        },
+        {
           translateY: backgroundAnimation2.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, -(loginRef + 40)]
+            outputRange: [0, -(loginRef + 30)]
           })
         }
       ]
@@ -110,9 +124,12 @@ class Login extends Component {
       }),
       transform: [
         {
+          translateX: -60,
+        },
+        {
           translateY: backgroundAnimation3.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, -(loginRef + 80)]
+            outputRange: [0, -(loginRef + 60)]
           })
         }
       ]
@@ -132,7 +149,9 @@ class Login extends Component {
           />
 
           <Animated.View style={[formAnimatedStyle, styles.form]}>
-            <LoginForm />
+            <LoginForm
+              onSubmit={this.onSubmit}
+            />
           </Animated.View>
         </KeyboardAvoidingView>
       </DismissKeyboard>
@@ -149,11 +168,11 @@ const mapStateToProps = ({ construction }) => ({
 })
 
 const mapDispatchToProps = (dispatch) => {
-  // const { getConstructions } = constructionActions
+  const { login } = userActions
 
   return (
     bindActionCreators({
-      // getConstructions,
+      login,
     }, dispatch)
   )
 }
