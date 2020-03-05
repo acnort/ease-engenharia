@@ -1,32 +1,29 @@
-import { baseURL } from '~/api'
+import { RESET_STATE } from "@redux-offline/redux-offline/lib/constants";
+import api from '~/api'
+import { AsyncStorage } from "react-native";
 
-const ADD_USER = 'ADD_USER'
-const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS'
-const ADD_USER_ERROR = 'ADD_USER_ERROR'
+const LOGIN = 'LOGIN'
+const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+const LOGIN_ERROR = 'LOGIN_ERROR'
 
 const INITIAL_STATE = {
-  users: [
-    'Ricardo',
-  ],
+  user: {}
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ADD_USER:
+    case LOGIN:
       return { ...state }
 
-    case ADD_USER_SUCCESS:
+    case LOGIN_SUCCESS:
       return {
-        ...state,
-        users: [
-          ...state.users,
-          action.payload.data.name
-        ],
+        data: action.payload,
+        error: ''
       }
 
-    case ADD_USER_ERROR:
+    case LOGIN_ERROR:
       return {
-        ...state,
+        data: {},
         error: action.error
       }
 
@@ -35,25 +32,26 @@ const userReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-const addUserAction = (user) => (
-  {
-    type: ADD_USER,
-    payload: {
-      user
-    },
-    meta: {
-      offline: {
-        effect: { url: `${baseURL}/users/${user}`, method: 'GET' },
-        commit: { type: ADD_USER_SUCCESS },
-        rollback: { type: ADD_USER_ERROR }
-      }
-    }
-  }
-)
+const onSignIn = (token) => AsyncStorage.setItem('TOKEN_KEY', token)
 
-export const addUser = (user) => (dispatch) => {
-  dispatch(addUserAction(user));
+const onSignOut = () => AsyncStorage.removeItem('TOKEN_KEY')
+
+export const login = (values) => (dispatch) => {
+  // dispatch({ type: RESET_STATE });
+
+  api.post('/login', values)
+    .then((resp) => {
+      dispatch({ type: LOGIN_SUCCESS, payload: resp.data })
+
+      if (resp.data.jwt) onSignIn()
+    })
+    .catch((error) => {
+      dispatch({ type: LOGIN_ERROR, error: error.response.data })
+    })
 }
 
+export const logout = () => {
+  onSignOut()
+}
 
 export default userReducer
