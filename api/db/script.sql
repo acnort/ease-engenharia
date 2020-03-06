@@ -1,4 +1,9 @@
 DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `item`;
+DROP TABLE IF EXISTS `floor`;
+DROP TABLE IF EXISTS `report`;
+DROP TABLE IF EXISTS `construction`;
+
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -12,7 +17,6 @@ CREATE TABLE `user` (
    UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `construction`;
 CREATE TABLE `construction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -22,7 +26,6 @@ CREATE TABLE `construction` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `report`;
 CREATE TABLE `report` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `constructionId` int(11) NOT NULL,
@@ -35,7 +38,6 @@ CREATE TABLE `report` (
   CONSTRAINT `fk_r_construction` FOREIGN KEY (`constructionId`) REFERENCES `construction` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `floor`;
 CREATE TABLE `floor` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `constructionId` int(11) NOT NULL,
@@ -46,7 +48,6 @@ CREATE TABLE `floor` (
   CONSTRAINT `fk_f_construction` FOREIGN KEY (`constructionId`) REFERENCES `construction` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `item`;
 CREATE TABLE `item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `floorId` int(11) NOT NULL,
@@ -61,4 +62,7 @@ CREATE TABLE `item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO user(`name`, `email`, `password`, `lastAccess`, `admin`, `created`, `updated`)
-       VALUES ('Ricardo', 'pellicioli_r@hotmail.com', '12345', null, 1, CURRENT_TIME(), CURRENT_TIME());
+       VALUES ('Ricardo Pellicioli', 'pellicioli_r@hotmail.com', 'usfei', null, 1, CURRENT_TIME(), CURRENT_TIME());
+
+INSERT INTO user(`name`, `email`, `password`, `lastAccess`, `admin`, `created`, `updated`)
+       VALUES ('André Tronca', 'andretronca@gmail.com', 'usfei', null, 1, CURRENT_TIME(), CURRENT_TIME());
