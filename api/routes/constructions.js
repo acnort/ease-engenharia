@@ -23,7 +23,30 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
 
     connection.query(query, [req.params.id], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows);
+            if(rows.length > 0){
+                const construction = {
+                    id: rows[0].id,
+                    title: rows[0].title,
+                    clientName: rows[0].clientName,
+                    created: rows[0].created,
+                    updated: rows[0].updated,
+                    floors: []
+                };
+
+                rows.forEach(r => {
+                    if(r.floorId){
+                        construction.floors.push({
+                            id: r.floorId,
+                            title: r.floorTitle
+                        });
+                    }
+                });
+
+                res.status(200).send(construction);
+            }
+            else{
+                res.status(200).send(rows);
+            }
         }
         else {
             res.status(500).send({ "message": error.sqlMessage });
