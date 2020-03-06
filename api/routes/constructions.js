@@ -19,7 +19,9 @@ router.get('/', authService.verifyToken, (req, res, next) => {
 
 //Get construction by id
 router.get('/:id', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT * FROM construction WHERE id = ?', [req.params.id], (error, rows, fields) => {
+    const query = 'SELECT c.*, f.id AS floorId, f.title AS floorTitle  FROM construction AS c LEFT JOIN floor AS f ON f.constructionId = c.id WHERE c.id = ?';
+
+    connection.query(query, [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
@@ -188,7 +190,7 @@ router.put('/:id', authService.verifyToken, (req, res, next) => {
     const updated = dateUtils.getCurrentDate();
     const query = 'UPDATE construction SET `title` = ?, `clientName` = ?, `updated` = ? WHERE id = ?';
 
-    if(!req.params.id){
+    if (!req.params.id) {
         return res.status(500).send({ message: "Id undefined" });
     }
 
@@ -209,7 +211,7 @@ router.put('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
     const updated = dateUtils.getCurrentDate();
     const query = 'UPDATE floor SET `title` = ?, `updated` = ? WHERE id = ?';
 
-    if(!req.params.floorId){
+    if (!req.params.floorId) {
         return res.status(500).send({ message: "Id undefined" });
     }
 
@@ -230,7 +232,7 @@ router.put('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (req, 
     const updated = dateUtils.getCurrentDate();
     const query = 'UPDATE item SET `title` = ?, `observation` = ?, `rating` = ?, `image` = ?, `updated` = ? WHERE id = ?';
 
-    if(!req.params.itemId){
+    if (!req.params.itemId) {
         return res.status(500).send({ message: "Id undefined" });
     }
 
