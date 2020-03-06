@@ -66,3 +66,326 @@ POST /login
   "token": string
 }
 ```
+
+## Constructions
+
+* **URL**
+
+```http
+GET /constructions
+```
+
+* **Response**
+
+```javascript
+[
+  {
+    "id": number,
+    "title": string,
+    "clientName": string,
+    "created": Date,
+    "updated": Date
+  }
+]
+```
+
+* **URL**
+
+```http
+GET /constructions/:id
+```
+
+* **Response**
+
+```javascript
+{
+  "id": number,
+  "title": string,
+  "clientName": string,
+  "created": Date,
+  "updated": Date,
+  "floors": [
+      {
+          "id": number,
+          "title": string
+      }
+  ]
+}
+```
+
+* **URL**
+
+```http
+DELETE /constructions/:id
+```
+
+* **Response**
+
+```javascript
+{
+  "message": string
+}
+```
+
+* **URL**
+
+```http
+PUT /constructions/:id
+```
+
+* **Data Params**
+
+```javascript
+{
+  "title": string,
+  "clientName": string
+}
+```
+
+* **Response**
+
+```javascript
+{
+  "message": string
+}
+```
+
+* **URL**
+
+```http
+POST /constructions
+```
+
+* **Data Params**
+
+```javascript
+{
+  "title": string,
+  "clientName": string
+}
+```
+
+* **Response**
+
+```javascript
+{
+  "id": number
+}
+```
+
+## Floors
+
+* **URL**
+
+```http
+GET /constructions/:id/floors
+```
+
+* **Response**
+
+```javascript
+[
+  {
+    "id": number,
+    "constructionId": number,
+    "title": string,
+    "created": Date,
+    "updated": Date
+  }
+]
+```
+
+* **URL**
+
+```http
+GET /constructions/:id/floors/:floorId
+```
+
+* **Response**
+
+```javascript
+{
+  "id": number,
+  "constructionId": number,
+  "title": string,
+  "created": Date,
+  "updated": Date,
+  "items": [
+      {
+          "id": number,
+          "title": string,
+          "observation": string,
+          "rating": number,
+          "image": string
+      }
+  ]
+}
+```
+
+* **URL**
+
+```http
+DELETE /constructions/:id/floors/:floorId
+```
+
+* **Response**
+
+```javascript
+{
+  "message": string
+}
+```
+
+* **URL**
+
+```http
+PUT /constructions/:id/floors/:floorId
+```
+
+* **Data Params**
+
+```javascript
+{
+  "title": string
+}
+```
+
+* **Response**
+
+```javascript
+{
+  "message": string
+}
+```
+
+* **URL**
+
+```http
+POST /constructions/:id/floors
+```
+
+* **Data Params**
+
+```javascript
+{
+  "title": string
+}
+```
+
+* **Response**
+
+```javascript
+{
+  "id": number
+}
+```
+
+## Items
+
+* **URL**
+
+```http
+GET /constructions/:id/floors/:floorId/items
+```
+
+* **Response**
+
+```javascript
+[
+  {
+    "id": number,
+    "floorId": number,
+    "title": string,
+    "observation": string,
+    "rating": number,
+    "image": string
+    "created": Date,
+    "updated": Date
+  }
+]
+```
+
+* **URL**
+
+```http
+GET /constructions/:id/floors/:floorId/items/:itemId
+```
+
+* **Response**
+
+```javascript
+{
+  "id": number,
+  "floorId": number,
+  "title": string,
+  "observation": string,
+  "rating": number,
+  "image": string
+  "created": Date,
+  "updated": Date
+}
+```
+
+* **URL**
+
+```http
+DELETE /constructions/:id/floors/:floorId/items/:itemId
+```
+
+* **Response**
+
+```javascript
+{
+  "message": string
+}
+```
+
+* **URL**
+
+```http
+PUT /constructions/:id/floors/:floorId/items/:itemId
+```
+
+* **Data Params**
+
+```javascript
+{
+  "title": string,
+  "observation": string,
+  "rating": number,
+  "image": string
+}
+```
+
+* **Response**
+
+```javascript
+{
+  "message": string
+}
+```
+
+* **URL**
+
+```http
+POST /constructions/:id/floors/:floorId/items
+```
+
+* **Data Params**
+
+```javascript
+{
+  "title": string,
+  "observation": string,
+  "rating": number,
+  "image": string
+}
+```
+
+* **Response**
+
+```javascript
+{
+  "id": number
+}
+```

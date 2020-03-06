@@ -4,6 +4,8 @@ const connection = require('../connection');
 const authService = require('../services/auth-service');
 const dateUtils = require('../utils/date-utils');
 
+//#region GET
+
 //Get all constructions
 router.get('/', authService.verifyToken, (req, res, next) => {
     connection.query('SELECT * FROM construction', (error, rows, fields) => {
@@ -11,7 +13,7 @@ router.get('/', authService.verifyToken, (req, res, next) => {
             res.status(200).send(rows);
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     })
@@ -49,7 +51,7 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
             }
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     });
@@ -64,7 +66,7 @@ router.get('/:id/floors', authService.verifyToken, (req, res, next) => {
             res.status(200).send(rows);
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     })
@@ -72,29 +74,40 @@ router.get('/:id/floors', authService.verifyToken, (req, res, next) => {
 
 //Get floor by id
 router.get('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => {
-    const query = 'SELECT * FROM floor WHERE id = ?';
+    const query = 'SELECT f.*, i.id AS itemId, i.title AS itemTitle, i.observation, i.rating, i.image FROM floor AS f LEFT JOIN item AS i ON i.floorId = f.id WHERE f.id = 1;';
 
     connection.query(query, [req.params.floorId], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows);
+            if(rows.length > 0){
+                const floor = {
+                    id: rows[0].id,
+                    constructionId: rows[0].constructionId,
+                    title: rows[0].title,
+                    created: rows[0].created,
+                    updated: rows[0].updated,
+                    items: []
+                };
+
+                rows.forEach(r => {
+                    if(r.itemId){
+                        floor.items.push({
+                            id: r.itemId,
+                            title: r.itemTitle,
+                            observation: r.observation,
+                            rating: r.rating,
+                            image: r.image
+                        });
+                    }
+                });
+
+                res.status(200).send(floor);
+            }
+            else{
+                res.status(200).send(rows);
+            }
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
-            next();
-        }
-    });
-});
-
-//Get item by id
-router.get('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (req, res, next) => {
-    const query = 'SELECT * FROM item WHERE id = ?';
-
-    connection.query(query, [req.params.itemId], (error, rows, fields) => {
-        if (!error) {
-            res.status(200).send(rows);
-        }
-        else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     });
@@ -109,20 +122,44 @@ router.get('/:id/floors/:floorId/items', authService.verifyToken, (req, res, nex
             res.status(200).send(rows);
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     })
 });
 
+//Get item by id
+router.get('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (req, res, next) => {
+    const query = 'SELECT * FROM item WHERE id = ?';
+
+    connection.query(query, [req.params.itemId], (error, rows, fields) => {
+        if (!error) {
+            if(rows.length > 0){
+                res.status(200).send(rows[0]);
+            }
+            else{
+                res.status(200).send(rows);
+            }
+        }
+        else {
+            res.status(500).send({ message: error.sqlMessage });
+            next();
+        }
+    });
+});
+
+//#endregion GET
+
+//#region DELETE
+
 //Delete construction by id
 router.delete('/:id', authService.verifyToken, (req, res, next) => {
     connection.query('DELETE FROM construction WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send('Deleted successfully.');
+            res.status(200).send({ message: 'Deleted successfully.' });
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     });
@@ -132,10 +169,10 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 router.delete('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => {
     connection.query('DELETE FROM floor WHERE id = ?', [req.params.floorId], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send('Deleted successfully.');
+            res.status(200).send({ message: 'Deleted successfully.' });
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     });
@@ -145,14 +182,18 @@ router.delete('/:id/floors/:floorId', authService.verifyToken, (req, res, next) 
 router.delete('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (req, res, next) => {
     connection.query('DELETE FROM item WHERE id = ?', [req.params.itemId], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send('Deleted successfully.');
+            res.status(200).send({ message: 'Deleted successfully.' });
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     });
 });
+
+//#endregion DELETE
+
+//#region POST
 
 //Insert an constructions
 router.post('/', authService.verifyToken, (req, res, next) => {
@@ -165,7 +206,7 @@ router.post('/', authService.verifyToken, (req, res, next) => {
             res.status(201).send({ id: rows.insertId });
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     });
@@ -182,7 +223,7 @@ router.post('/:id/floors', authService.verifyToken, (req, res, next) => {
             res.status(201).send({ id: rows.insertId });
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     });
@@ -201,11 +242,15 @@ router.post('/:id/floors/:floorId/items', authService.verifyToken, (req, res, ne
             res.status(201).send({ id: rows.insertId });
         }
         else {
-            res.status(500).send({ "message": error.sqlMessage });
+            res.status(500).send({ message: error.sqlMessage });
             next();
         }
     });
 });
+
+//#endregion POST
+
+//#region PUT
 
 //Update an constructions
 router.put('/:id', authService.verifyToken, (req, res, next) => {
@@ -269,5 +314,7 @@ router.put('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (req, 
         }
     });
 });
+
+//#endregion PUT
 
 module.exports = router;
