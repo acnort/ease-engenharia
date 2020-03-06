@@ -60,42 +60,5 @@ CREATE TABLE `item` (
   CONSTRAINT `fk_i_floor` FOREIGN KEY (`floorId`) REFERENCES `floor` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- DROP TABLE IF EXISTS `construction_floor`;
--- CREATE TABLE `construction_floor` (
---   `id_construction` int(11) NOT NULL,
---   `id_floor` int(11) NOT NULL,
---   PRIMARY KEY (`id_construction`, `id_floor`) USING BTREE,
---   CONSTRAINT `fk_cf_construction` FOREIGN KEY (`id_construction`) REFERENCES `construction` (`id`) ON DELETE CASCADE,
---   CONSTRAINT `fk_cf_floor` FOREIGN KEY (`id_floor`) REFERENCES `floor` (`id`) ON DELETE CASCADE
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE PROCEDURE `user_add_or_edit` (
-	IN _id INT,
-    IN _name varchar(255),
-    IN _email varchar(255),
-    IN _password varchar(255),
-    IN _last_access datetime,
-    IN _admin tinyint(1)
-)
-BEGIN
-	IF _id = 0 THEN
-		INSERT INTO user(`name`, `email`, `password`, `lastAccess`, `admin`, `created`, `updated`)
-        VALUES (_name, _email, _password, _last_access, _admin, CURRENT_TIME(), CURRENT_TIME());
-        
-        SET _id = LAST_INSERT_ID();
-	ELSE
-		UPDATE user
-        SET 
-        `name` = _name,
-        `email` = _email,
-        `password` = _password,
-        `lastAccess` = _last_access,
-        `admin` = _admin,
-        `updated` = CURRENT_TIME()
-        WHERE `id` = _id;
-	END IF;
-    
-    SELECT _id AS 'id';
-END
-
-
+INSERT INTO user(`name`, `email`, `password`, `lastAccess`, `admin`, `created`, `updated`)
+       VALUES ('Ricardo', 'pellicioli_r@hotmail.com', '12345', null, 1, CURRENT_TIME(), CURRENT_TIME());
