@@ -16,9 +16,9 @@ import styles from './styles'
 
 class ConstructionDetail extends Component {
   handlePress = () => {
-    const { addUser } = this.props
+    const { logout } = this.props
 
-    addUser('arojunior')
+    logout()
   }
 
   render() {
@@ -30,7 +30,7 @@ class ConstructionDetail extends Component {
             onPress={this.handlePress}
             activeOpacity={3}
           >
-            <Text style={styles.buttonText}>Ação</Text>
+            <Text style={styles.buttonText}>Logout</Text>
           </TouchableOpacity>
         </View>
       </Container>
@@ -39,7 +39,7 @@ class ConstructionDetail extends Component {
 }
 
 ConstructionDetail.propTypes = {
-  addUser: PropTypes.func
+  logout: PropTypes.func
 }
 
 const mapStateToProps = ({ user }) => ({
@@ -47,11 +47,11 @@ const mapStateToProps = ({ user }) => ({
 })
 
 const mapDispatchToProps = (dispatch) => {
-  const { addUser } = userActions
+  const { logout } = userActions
 
   return (
     bindActionCreators({
-      addUser,
+      logout,
     }, dispatch)
   )
 }
