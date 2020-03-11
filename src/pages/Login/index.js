@@ -59,8 +59,6 @@ class Login extends Component {
 
     login(values)
 
-    // this.props.navigation.navigate('Obras')
-
     Keyboard.dismiss()
   }
 

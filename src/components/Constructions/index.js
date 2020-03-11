@@ -11,9 +11,15 @@ import {
 import styles from './styles'
 
 class Constructions extends Component {
+  handlePress = () => {
+    const { handlePress } = this.props
+    handlePress()
+  }
+
   renderItem = ({ item, index }) => (
     <TouchableOpacity
       style={styles.listItem}
+      onPress={this.handlePress}
     >
       <Text>{`${item.name} ${index}`}</Text>
     </TouchableOpacity>

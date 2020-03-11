@@ -16,9 +16,16 @@ import {
 
 import styles from './styles'
 
-class ConstructionsList extends Component {
+class ConstructionList extends Component {
   componentDidMount() {
     this.getConstructions()
+  }
+
+  handlePress = () => {
+    console.warn(this.props)
+    const { navigation: { navigate } } = this.props
+
+    navigate('Obras', { screen: 'ConstructionDetail' })
   }
 
   getConstructions = async () => {
@@ -37,14 +44,14 @@ class ConstructionsList extends Component {
     return (
       <Container>
         <View style={styles.body}>
-          <Constructions items={construction.list} />
+          <Constructions items={construction.list} handlePress={this.handlePress} />
         </View>
       </Container>
     )
   }
 }
 
-ConstructionsList.propTypes = {
+ConstructionList.propTypes = {
   getConstructions: PropTypes.func,
   construction: PropTypes.object
 }
@@ -63,4 +70,4 @@ const mapDispatchToProps = (dispatch) => {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConstructionsList)
+export default connect(mapStateToProps, mapDispatchToProps)(ConstructionList)

@@ -20,7 +20,7 @@ class Container extends Component {
       <>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={styles.safeAreaView}>
-          <Header />
+          {/* <Header /> */}
           {hasScrollView ? (
             <ScrollView
               contentInsetAdjustmentBehavior="automatic"

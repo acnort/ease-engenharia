@@ -2,6 +2,8 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import { StyleSheet, Platform } from 'react-native'
+
 import Colors from '~/utils/colors';
 
 export const screenOptions = ({ route }) => ({
@@ -25,12 +27,21 @@ export const screenOptions = ({ route }) => ({
   }
 })
 
+const styles = {
+  ios: StyleSheet.create({
+    height: 100,
+    paddingTop: 10
+  }),
+  android: StyleSheet.create({
+    height: 80,
+    paddingTop: 10,
+    paddingBottom: 15
+  })
+}
+
 export const tabBarOptions = {
   activeTintColor: Colors.darkMain,
   inactiveTintColor: Colors.lightGray,
-  style: {
-    height: 100,
-    paddingTop: 10
-  }
+  style: Platform.iOS ? styles.ios : styles.android
 }
 /* eslint-enable react/prop-types */

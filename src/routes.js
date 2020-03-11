@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 import {
   Login,
-  ConstructionsList,
+  ConstructionList,
   ConstructionDetail
 } from '~/pages';
 
@@ -32,22 +32,10 @@ class Routes extends Component {
     this.setState({ isLogged: jwt })
   }
 
-  // static getDerivedStateFromProps(props, state) {
-  //   console.warn(props, state)
-  //   if (props.user.data.token !== state.isLogged) {
-  //     console.warn(1)
-  //     return {
-  //       isLogged: props.user.token
-  //     }
-  //   }
-
-  //   return null
-  // }
-
   render() {
     const { isLogged } = this.state
-    const { token } = this.props.user.data
-    console.warn(token)
+    const { user: { data: { token } } } = this.props
+
     return (
       <NavigationContainer>
         {!token ? (
@@ -67,7 +55,15 @@ class Routes extends Component {
               screenOptions={screenOptions}
               tabBarOptions={tabBarOptions}
             >
-              <Tab.Screen name="Obras" component={ConstructionsList} />
+              {/* <Tab.Screen name="Obras" component={ConstructionsList} /> */}
+              <Tab.Screen name="Obras">
+                {() => (
+                  <Stack.Navigator>
+                    <Stack.Screen name="ConstructionList" component={ConstructionList} />
+                    <Stack.Screen name="ConstructionDetail" component={ConstructionDetail} />
+                  </Stack.Navigator>
+                )}
+              </Tab.Screen>
               <Tab.Screen name="Configurações" component={ConstructionDetail} />
             </Tab.Navigator>
           )}
