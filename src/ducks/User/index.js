@@ -1,13 +1,16 @@
-import { RESET_STATE } from "@redux-offline/redux-offline/lib/constants";
+import { RESET_STATE } from '@redux-offline/redux-offline/lib/constants';
+import { AsyncStorage } from 'react-native';
+
 import api from '~/api'
-import { AsyncStorage } from "react-native";
 
 const LOGIN = 'LOGIN'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGIN_ERROR = 'LOGIN_ERROR'
+const LOGOUT = 'LOGOUT'
 
 const INITIAL_STATE = {
-  user: {}
+  data: {},
+  error: ''
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -27,31 +30,36 @@ const userReducer = (state = INITIAL_STATE, action) => {
         error: action.error
       }
 
+    case LOGOUT:
+      return {
+        data: {},
+        error: ''
+      }
+
     default:
       return state
   }
 };
 
-const onSignIn = (token) => AsyncStorage.setItem('TOKEN_KEY', token)
+const onSignIn = (token) => AsyncStorage.setItem('JWT', token)
 
-const onSignOut = () => AsyncStorage.removeItem('TOKEN_KEY')
+const onSignOut = () => AsyncStorage.removeItem('JWT')
 
 export const login = (values) => (dispatch) => {
-  // dispatch({ type: RESET_STATE });
-
   api.post('/login', values)
-    .then((resp) => {
+    .then(async (resp) => {
       dispatch({ type: LOGIN_SUCCESS, payload: resp.data })
 
-      if (resp.data.jwt) onSignIn()
+      if (resp.data.token) await onSignIn(resp.data.token)
     })
     .catch((error) => {
       dispatch({ type: LOGIN_ERROR, error: error.response.data })
     })
 }
 
-export const logout = () => {
+export const logout = () => (dispatch) => {
   onSignOut()
+  dispatch({ type: LOGOUT });
 }
 
 export default userReducer
