@@ -57,6 +57,41 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
     });
 });
 
+//Get reports by construction
+router.get('/:id/reports', authService.verifyToken, (req, res, next) => {
+    const query = 'SELECT * FROM report WHERE constructionId = ?';
+
+    connection.query(query, [req.params.id], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send(rows);
+        }
+        else {
+            res.status(500).send({ message: error.sqlMessage });
+            next();
+        }
+    })
+});
+
+//Get report by id
+router.get('/:id/reports/:reportId', authService.verifyToken, (req, res, next) => {
+    const query = 'SELECT * FROM report WHERE id = ?';
+
+    connection.query(query, [req.params.reportId], (error, rows, fields) => {
+        if (!error) {
+            if(rows.length > 0){
+                res.status(200).send(rows[0]);
+            }
+            else{
+                res.status(200).send(rows);
+            }
+        }
+        else {
+            res.status(500).send({ message: error.sqlMessage });
+            next();
+        }
+    })
+});
+
 //Get floors by construction
 router.get('/:id/floors', authService.verifyToken, (req, res, next) => {
     const query = 'SELECT * FROM floor WHERE constructionId = ?';
@@ -113,7 +148,7 @@ router.get('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
     });
 });
 
-//Get items by floorId
+//Get items by floor
 router.get('/:id/floors/:floorId/items', authService.verifyToken, (req, res, next) => {
     const query = 'SELECT * FROM item WHERE floorId = ?';
 
@@ -166,6 +201,19 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 });
 
 //Delete floor by id
+router.delete('/:id/reports/:reportId', authService.verifyToken, (req, res, next) => {
+    connection.query('DELETE FROM report WHERE id = ?', [req.params.reportId], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send({ message: 'Deleted successfully.' });
+        }
+        else {
+            res.status(500).send({ message: error.sqlMessage });
+            next();
+        }
+    });
+});
+
+//Delete floor by id
 router.delete('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => {
     connection.query('DELETE FROM floor WHERE id = ?', [req.params.floorId], (error, rows, fields) => {
         if (!error) {
@@ -202,6 +250,23 @@ router.post('/', authService.verifyToken, (req, res, next) => {
     const query = 'INSERT INTO construction(`title`, `clientName`, `created`) VALUES (?, ?, ?)';
 
     connection.query(query, [post.title, post.clientName, created], (error, rows, fields) => {
+        if (!error) {
+            res.status(201).send({ id: rows.insertId });
+        }
+        else {
+            res.status(500).send({ message: error.sqlMessage });
+            next();
+        }
+    });
+});
+
+//Insert an reports
+router.post('/:id/reports', authService.verifyToken, (req, res, next) => {
+    const post = req.body;
+    const created = dateUtils.getCurrentDate();
+    const query = 'INSERT INTO report(`constructionId`, `serviceNumber`, `pdf`, `word`, `created`) VALUES (?, ?, ?, ?, ?)';
+
+    connection.query(query, [req.params.id, post.serviceNumber, post.pdf, post.word, created], (error, rows, fields) => {
         if (!error) {
             res.status(201).send({ id: rows.insertId });
         }
@@ -263,6 +328,27 @@ router.put('/:id', authService.verifyToken, (req, res, next) => {
     }
 
     connection.query(query, [post.title, post.clientName, updated, req.params.id], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send({ message: 'Updated successfully' });
+        }
+        else {
+            res.status(500).send({ "message": error.sqlMessage });
+            next();
+        }
+    });
+});
+
+//Update an reports
+router.put('/:id/reports/:reportId', authService.verifyToken, (req, res, next) => {
+    const post = req.body;
+    const updated = dateUtils.getCurrentDate();
+    const query = 'UPDATE report SET `serviceNumber` = ?, `pdf` = ?, `word` = ?, `updated` = ? WHERE id = ?';
+
+    if (!req.params.reportId) {
+        return res.status(500).send({ message: "Id undefined" });
+    }
+
+    connection.query(query, [post.serviceNumber, post.pdf, post.word, updated, req.params.reportId], (error, rows, fields) => {
         if (!error) {
             res.status(200).send({ message: 'Updated successfully' });
         }

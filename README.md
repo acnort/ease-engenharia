@@ -173,6 +173,112 @@ POST /constructions
 }
 ```
 
+## Reports
+
+* **URL**
+
+```http
+GET /constructions/:id/reports
+```
+
+* **Response**
+
+```javascript
+[
+  {
+    "id": number,
+    "constructionId": number,
+    "serviceNumber": number,
+    "pdf": string,
+    "word": string,
+    "created": Date,
+    "updated": Date
+  }
+]
+```
+
+* **URL**
+
+```http
+GET /constructions/:id/reports/:reportId
+```
+
+* **Response**
+
+```javascript
+{
+  "id": number,
+  "constructionId": number,
+  "serviceNumber": number,
+  "pdf": string,
+  "word": string,
+  "created": Date,
+  "updated": Date,
+}
+```
+
+* **URL**
+
+```http
+DELETE /constructions/:id/reports/:reportId
+```
+
+* **Response**
+
+```javascript
+{
+  "message": string
+}
+```
+
+* **URL**
+
+```http
+PUT /constructions/:id/reports/:reportId
+```
+
+* **Data Params**
+
+```javascript
+{
+  "serviceNumber": number,
+  "pdf": string,
+  "word": string
+}
+```
+
+* **Response**
+
+```javascript
+{
+  "message": string
+}
+```
+
+* **URL**
+
+```http
+POST /constructions/:id/reports
+```
+
+* **Data Params**
+
+```javascript
+{
+  "serviceNumber": number,
+  "pdf": string,
+  "word": string
+}
+```
+
+* **Response**
+
+```javascript
+{
+  "id": number
+}
+```
+
 ## Floors
 
 * **URL**
