@@ -8,6 +8,8 @@ import {
   TouchableOpacity
 } from 'react-native';
 
+import Icon from 'react-native-vector-icons/Ionicons'
+
 import styles from './styles'
 
 class Constructions extends Component {
@@ -16,14 +18,21 @@ class Constructions extends Component {
     handlePress()
   }
 
-  renderItem = ({ item, index }) => (
-    <TouchableOpacity
-      style={styles.listItem}
-      onPress={this.handlePress}
-    >
-      <Text>{`${item.name} ${index}`}</Text>
-    </TouchableOpacity>
-  )
+  renderItem = ({ item, index }) => {
+    console.warn(item)
+    return (
+      <TouchableOpacity
+        style={[styles.listItem, {
+          borderLeftWidth: 6,
+          borderLeftColor: '#000'
+        }]}
+        onPress={this.handlePress}
+      >
+        <Text>{`${item.name} ${index}`}</Text>
+        <Icon name='md-open' size={20} />
+      </TouchableOpacity>
+    )
+  }
 
 
   render() {
@@ -53,7 +62,8 @@ class Constructions extends Component {
 }
 
 Constructions.propTypes = {
-  items: PropTypes.array
+  items: PropTypes.array,
+  handlePress: PropTypes.func
 }
 
 export default Constructions;

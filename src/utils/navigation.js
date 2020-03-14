@@ -30,12 +30,21 @@ export const screenOptions = ({ route }) => ({
 const styles = {
   ios: StyleSheet.create({
     height: 100,
-    paddingTop: 10
+    paddingTop: 10,
+    shadowOpacity: 0,
+    borderTopWidth: 0,
+    shadowOffset: {
+      height: 0,
+    },
+    shadowRadius: 0,
+    elevation: 0
   }),
   android: StyleSheet.create({
     height: 80,
     paddingTop: 10,
-    paddingBottom: 15
+    paddingBottom: 15,
+    borderTopWidth: 0,
+    elevation: 0
   })
 }
 

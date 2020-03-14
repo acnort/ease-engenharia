@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { AsyncStorage } from 'react-native';
 import PropTypes from 'prop-types';
 
 import {
@@ -18,22 +17,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 class Routes extends Component {
-  state = {
-    isLogged: false
-  }
-
-  componentDidMount() {
-    this.getJWT()
-  }
-
-  getJWT = async () => {
-    const jwt = await AsyncStorage.getItem('JWT')
-
-    this.setState({ isLogged: jwt })
-  }
-
   render() {
-    const { isLogged } = this.state
     const { user: { data: { token } } } = this.props
 
     return (
@@ -58,9 +42,31 @@ class Routes extends Component {
               {/* <Tab.Screen name="Obras" component={ConstructionsList} /> */}
               <Tab.Screen name="Obras">
                 {() => (
-                  <Stack.Navigator>
-                    <Stack.Screen name="ConstructionList" component={ConstructionList} />
-                    <Stack.Screen name="ConstructionDetail" component={ConstructionDetail} />
+                  <Stack.Navigator
+                    screenOptions={{
+                      headerMode: 'float',
+                      headerTitleAlign: 'center',
+                      headerStyle: {
+                        shadowOpacity: 0,
+                        shadowOffset: {
+                          height: 0,
+                        },
+                        shadowRadius: 0,
+                        elevation: 0
+                      },
+                    }}
+                  >
+                    <Stack.Screen
+                      name="Obras"
+                      component={ConstructionList}
+                    />
+                    <Stack.Screen
+                      name="ConstructionDetail"
+                      component={ConstructionDetail}
+                      options={{
+                        gestureEnabled: true
+                      }}
+                    />
                   </Stack.Navigator>
                 )}
               </Tab.Screen>

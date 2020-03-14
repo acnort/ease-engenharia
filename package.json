@@ -5,7 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "api": "nodemon api/server.js",
+    "api": "NODE_ENV=development nodemon api/server.js ",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."

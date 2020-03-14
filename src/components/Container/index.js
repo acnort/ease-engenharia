@@ -4,21 +4,25 @@ import {
   SafeAreaView,
   ScrollView,
   View,
-  Text,
   StatusBar,
 } from 'react-native';
 
-import { Header } from '~/components'
+import PropTypes from 'prop-types';
+
+// import { Header } from '~/components'
 
 import styles from './styles'
 
 class Container extends Component {
   render() {
     const { children, hasScrollView } = this.props
-    console.warn(children)
+
     return (
       <>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#fff"
+        />
         <SafeAreaView style={styles.safeAreaView}>
           {/* <Header /> */}
           {hasScrollView ? (
@@ -38,6 +42,11 @@ class Container extends Component {
       </>
     );
   }
+}
+
+Container.propTypes = {
+  children: PropTypes.object,
+  hasScrollView: PropTypes.bool
 }
 
 export default Container;

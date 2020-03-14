@@ -22,10 +22,9 @@ class ConstructionList extends Component {
   }
 
   handlePress = () => {
-    console.warn(this.props)
     const { navigation: { navigate } } = this.props
-
-    navigate('Obras', { screen: 'ConstructionDetail' })
+    console.warn(this.props)
+    navigate('ConstructionDetail')
   }
 
   getConstructions = async () => {
@@ -40,7 +39,7 @@ class ConstructionList extends Component {
 
   render() {
     const { construction } = this.props
-
+    console.warn(construction)
     return (
       <Container>
         <View style={styles.body}>
@@ -52,6 +51,7 @@ class ConstructionList extends Component {
 }
 
 ConstructionList.propTypes = {
+  navigation: PropTypes.object,
   getConstructions: PropTypes.func,
   construction: PropTypes.object
 }
