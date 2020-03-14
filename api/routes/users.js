@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const connection = require('../connection');
+const authService = require('../services/auth-service');
 
 //Get all users
-router.get('/', verifyToken, (req, res, next) => {
+router.get('/', authService.verifyToken, (req, res, next) => {
     connection.query('SELECT * FROM user', (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
@@ -18,7 +18,7 @@ router.get('/', verifyToken, (req, res, next) => {
 });
 
 //Get user by id
-router.get('/:id', verifyToken, (req, res, next) => {
+router.get('/:id', authService.verifyToken, (req, res, next) => {
     connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
@@ -32,7 +32,7 @@ router.get('/:id', verifyToken, (req, res, next) => {
 });
 
 //Delete user by id
-router.delete('/:id', verifyToken, (req, res, next) => {
+router.delete('/:id', authService.verifyToken, (req, res, next) => {
     connection.query('DELETE FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Deleted successfully.');
@@ -46,10 +46,12 @@ router.delete('/:id', verifyToken, (req, res, next) => {
 });
 
 //Insert an user
-router.post('/', verifyToken, (req, res, next) => {
-    let post = req.body;
+router.post('/', authService.verifyToken, (req, res, next) => {
+    const post = req.body;
+    const created = dateUtils.getCurrentDate();
+    const query = 'INSERT INTO user(`name`, `email`, `password`, `lastAccess`, `admin`, `created`) VALUES (?, ?, ?, ?, ?, ?)';
 
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [0, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
+    connection.query(query, [post.name, post.email, post.password, null, post.admin, created], (error, rows, fields) => {
         if (!error) {
             res.status(201).send(rows[0][0]);
         }
@@ -62,10 +64,12 @@ router.post('/', verifyToken, (req, res, next) => {
 });
 
 //Update an user
-router.put('/', verifyToken, (req, res, next) => {
-    let post = req.body;
+router.put('/:id', authService.verifyToken, (req, res, next) => {
+    const post = req.body;
+    const updated = dateUtils.getCurrentDate();
+    const query = 'UPDATE user SET `name` = ?, `email` = ?, `password` = ?, `lastAccess` = ?, `admin` = ?, `updated` = ?  WHERE id = ?';
 
-    connection.query('CALL user_add_or_edit(?, ?, ?, ?, ?, ?)', [post.id, post.name, post.email, post.password, null, post.admin], (error, rows, fields) => {
+    connection.query(query, [post.name, post.email, post.password, null, post.admin, updated, req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Updated successfully');
         }
@@ -76,29 +80,5 @@ router.put('/', verifyToken, (req, res, next) => {
         }
     });
 });
-
-//FORMAT OF TOKEN
-//Authorization: Bearer <access_token>
-
-function verifyToken(req, res, next) {
-    const bearerHeader = req.headers['authorization'];
-    if (typeof bearerHeader === 'undefined') {
-        return res.status(401).send({ auth: false, message: 'No token provided.' });
-    }
-
-    const bearer = bearerHeader.split(' ');
-    const token = bearer[1];
-
-    jwt.verify(token, 'secretkey', function (error, decoded) {
-        if (error) {
-            return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-        }
-
-        // se tudo estiver ok, salva no request para uso posterior
-        req.userId = decoded.id;
-        req.token = token;
-        next();
-    });
-}
 
 module.exports = router;
