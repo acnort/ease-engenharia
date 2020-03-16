@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const url = require('url');
+const querystring = require('querystring');
 const connection = require('../connection');
 const authService = require('../services/auth-service');
 const dateUtils = require('../utils/date-utils');
@@ -7,10 +9,19 @@ const dateUtils = require('../utils/date-utils');
 //#region GET
 
 //Get all constructions
-router.get('/', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT * FROM construction', (error, rows, fields) => {
+router.get('/', authService.verifyToken, async (req, res, next) => {
+    const page = req.query.page ? req.query.page : 0;
+    const items = req.query.items ? req.query.items : 9999;
+    const offset = page * items;
+    
+    const total = await connection.query( 'SELECT COUNT(id) AS count FROM construction');
+    
+    connection.query('SELECT * FROM construction LIMIT ? OFFSET ?', [Number(items), offset], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows);
+            res.status(200).send({
+                constructions: rows,
+                total: total.length > 0 ? total[0].count : 0
+            });
         }
         else {
             res.status(500).send({ message: error.sqlMessage });
@@ -58,12 +69,20 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
 });
 
 //Get reports by construction
-router.get('/:id/reports', authService.verifyToken, (req, res, next) => {
-    const query = 'SELECT * FROM report WHERE constructionId = ?';
+router.get('/:id/reports', authService.verifyToken, async (req, res, next) => {
+    const page = req.query.page ? req.query.page : 0;
+    const items = req.query.items ? req.query.items : 9999;
+    const offset = page * items;
+    
+    const query = 'SELECT * FROM report WHERE constructionId = ? LIMIT ? OFFSET ?';
+    const total = await connection.query('SELECT COUNT(id) AS count FROM report WHERE constructionId = ?', [req.params.id]);
 
-    connection.query(query, [req.params.id], (error, rows, fields) => {
+    connection.query(query, [req.params.id, Number(items), offset], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows);
+            res.status(200).send({
+                reports: rows,
+                total: total.length > 0 ? total[0].count : 0
+            });
         }
         else {
             res.status(500).send({ message: error.sqlMessage });
@@ -93,12 +112,20 @@ router.get('/:id/reports/:reportId', authService.verifyToken, (req, res, next) =
 });
 
 //Get floors by construction
-router.get('/:id/floors', authService.verifyToken, (req, res, next) => {
-    const query = 'SELECT * FROM floor WHERE constructionId = ?';
+router.get('/:id/floors', authService.verifyToken, async (req, res, next) => {
+    const page = req.query.page ? req.query.page : 0;
+    const items = req.query.items ? req.query.items : 9999;
+    const offset = page * items;
 
-    connection.query(query, [req.params.id], (error, rows, fields) => {
+    const query = 'SELECT * FROM floor WHERE constructionId = ? LIMIT ? OFFSET ?';
+    const total = await connection.query('SELECT COUNT(id) AS count FROM floor WHERE constructionId = ?', [req.params.id]);
+
+    connection.query(query, [req.params.id, Number(items), offset], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows);
+            res.status(200).send({
+                floors: rows,
+                total: total.length > 0 ? total[0].count : 0
+            });
         }
         else {
             res.status(500).send({ message: error.sqlMessage });
@@ -149,12 +176,20 @@ router.get('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
 });
 
 //Get items by floor
-router.get('/:id/floors/:floorId/items', authService.verifyToken, (req, res, next) => {
-    const query = 'SELECT * FROM item WHERE floorId = ?';
+router.get('/:id/floors/:floorId/items', authService.verifyToken, async (req, res, next) => {
+    const page = req.query.page ? req.query.page : 0;
+    const items = req.query.items ? req.query.items : 9999;
+    const offset = page * items;
 
-    connection.query(query, [req.params.floorId], (error, rows, fields) => {
+    const query = 'SELECT * FROM item WHERE floorId = ? LIMIT ? OFFSET ?';
+    const total = await connection.query('SELECT COUNT(id) AS count FROM item WHERE floorId = ?', [req.params.floorId]);
+
+    connection.query(query, [req.params.floorId, Number(items), offset], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows);
+            res.status(200).send({
+                items: rows,
+                total: total.length > 0 ? total[0].count : 0
+            });
         }
         else {
             res.status(500).send({ message: error.sqlMessage });
