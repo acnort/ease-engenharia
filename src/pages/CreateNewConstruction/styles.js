@@ -11,7 +11,8 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingVertical: 30,
   },
   button: {
     alignItems: 'center',
@@ -23,14 +24,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-  },
-  footer: {
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+  }
 })
 
 export default styles

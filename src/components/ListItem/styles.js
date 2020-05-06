@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     textAlign: 'center'
+  },
+  status: {
+    borderRadius: 10,
+    height: 10,
+    width: 10
   }
 })
 

@@ -9,59 +9,42 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import {
-  FloorsList
-} from '~/components'
-
 import styles from './styles'
 
 class ConstructionForm extends Component {
   render() {
     const {
-      onSubmit
+      onSubmit,
+      initialValues
     } = this.props
 
     return (
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={initialValues || { title: '', clientName: '' }}
         onSubmit={(values) => onSubmit(values)}
+        enableReinitialize
       >
         {({ handleChange, handleSubmit, values }) => (
           <View style={styles.wrapper}>
             <View style={styles.subtitle}><Text>Infos</Text></View>
             <TextInput
+              name='title'
               style={styles.input}
-              value={values.email}
+              value={values.title}
               placeholder='Nome da Obra'
               textContentType='text'
-              keyboardType='text'
-              onChangeText={handleChange('constructionName')}
+              keyboardType='default'
+              onChangeText={handleChange('title')}
             />
             <TextInput
+              name='clientName'
               style={styles.input}
-              value={values.email}
+              value={values.clientName}
               placeholder='Nome do Cliente'
               textContentType='text'
-              keyboardType='text'
+              keyboardType='default'
               onChangeText={handleChange('clientName')}
             />
-            <View style={styles.subtitle}><Text>Andares</Text></View>
-            <FloorsList
-              items={[
-                {
-                  name: 'Andar 1',
-                },
-                {
-                  name: 'Andar 2',
-                },
-                {
-                  name: 'Andar 3',
-                }
-              ]}
-              handlePress={this.handlePress}
-            // navigation={navigation}
-            />
-
             <TouchableOpacity
               style={styles.button}
               onPress={handleSubmit}
@@ -76,7 +59,8 @@ class ConstructionForm extends Component {
 }
 
 ConstructionForm.propTypes = {
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  initialValues: PropTypes.func
 }
 
 export default ConstructionForm

@@ -62,23 +62,27 @@ class Routes extends Component {
                     }}
                   >
                     <Stack.Screen
-                      name="Obras"
+                      name="ConstructionList"
                       component={ConstructionList}
+                      options={{
+                        title: 'Obras',
+                      }}
                     />
                     <Stack.Screen
                       name="ConstructionDetail"
                       component={ConstructionDetail}
                       options={({ route }) => ({
-                        title: route.params.construction.name || 'Detalhe',
+                        title: route.params ? route.params.construction.name : 'Detalhe',
                         gestureEnabled: true
                       })}
                     />
                     <Stack.Screen
                       name="CreateNewConstruction"
                       component={CreateNewConstruction}
-                      options={{
+                      options={({ route }) => ({
+                        title: (route.params && route.params.construction) ? 'Editar Obra' : 'Nova Obra',
                         gestureEnabled: true
-                      }}
+                      })}
                     />
                   </Stack.Navigator>
                 )}

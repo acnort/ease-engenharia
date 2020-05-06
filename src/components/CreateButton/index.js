@@ -28,7 +28,6 @@ class CreateButton extends Component {
 }
 
 CreateButton.propTypes = {
-  handlePress: PropTypes.func.isRequired,
   options: PropTypes.object
 }
 

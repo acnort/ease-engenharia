@@ -44,7 +44,7 @@ class ConstructionList extends Component {
       <Container>
         <View style={styles.body}>
           <List
-            items={construction.list}
+            items={construction.data}
             handlePress={this.handlePress}
             navigation={navigation}
             createButtonAction={() => navigation.navigate('CreateNewConstruction')}

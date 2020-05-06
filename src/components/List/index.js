@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  FlatList
+  FlatList,
+  View
 } from 'react-native'
 
 import {
@@ -19,45 +20,46 @@ class List extends Component {
     handlePress(item)
   }
 
-  renderItem = ({ item, index }) => {
-    const { items, createButtonAction } = this.props
+  renderItem = ({ item }) => {
+    const { navigation } = this.props
 
-    if (index === items.length - 1) {
-      return (
-        <CreateButton
-          options={{
-            title: 'Nova Obra',
-            handlePress: () => createButtonAction()
-          }}
-        />
-      )
-    }
     return (
-      <ListItem item={item} handlePress={(construction) => this.handlePress(construction)} />
+      <ListItem
+        navigation={navigation}
+        item={item}
+        handlePress={(construction) => this.handlePress(construction)}
+        status='hasRisk'
+      />
     )
   }
 
-
   render() {
-    const { items } = this.props
+    const { items, createButtonAction } = this.props
 
     return (
       <>
-        {items && items.length > 0 && (
-          <FlatList
-            data={items}
-            extraData={items}
-            keyExtractor={(item) => `${item.id}`}
-            renderItem={this.renderItem}
-            onEndReached={this.loadMore}
-            onEndReachedThreshold={0.5}
-            // ListFooterComponent={hasNextPage ? this.renderLoader : null}
-            ListFooterComponentStyle={{
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            style={styles.list}
-          />
+        {items && (
+          <View style={styles.list}>
+            <FlatList
+              data={items}
+              extraData={items}
+              keyExtractor={(item) => `${item.id}`}
+              renderItem={this.renderItem}
+              onEndReached={this.loadMore}
+              onEndReachedThreshold={0.5}
+              // ListFooterComponent={hasNextPage ? this.renderLoader : null}
+              ListFooterComponentStyle={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            />
+            <CreateButton
+              options={{
+                title: 'Nova Obra',
+                handlePress: () => createButtonAction()
+              }}
+            />
+          </View>
         )}
       </>
     );
@@ -66,6 +68,7 @@ class List extends Component {
 
 List.propTypes = {
   items: PropTypes.array,
+  navigation: PropTypes.object.isRequired,
   handlePress: PropTypes.func,
   createButtonAction: PropTypes.func,
 }

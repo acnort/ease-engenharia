@@ -43,17 +43,9 @@ const userReducer = (state = INITIAL_STATE, action) => {
 
 const onSignIn = (token) => AsyncStorage.setItem('JWT', token)
 
-const onSignOut = () => AsyncStorage.removeItem('JWT')
+const onSignOut = () => AsyncStorage.clear()
 
 export const login = (values) => (dispatch) => {
-  // tirar
-  if (values) {
-    dispatch({ type: LOGIN_SUCCESS, payload: { token: 'aaa' } })
-    onSignIn('aaa')
-    return true
-  }
-  // tirar
-
   api.post('/login', values)
     .then(async (resp) => {
       dispatch({ type: LOGIN_SUCCESS, payload: resp.data })
@@ -63,9 +55,6 @@ export const login = (values) => (dispatch) => {
     .catch((error) => {
       dispatch({ type: LOGIN_ERROR, error: error.response.data })
     })
-  // tirar
-  return false
-  // tirar
 }
 
 export const logout = () => (dispatch) => {
