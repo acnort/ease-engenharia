@@ -39,7 +39,8 @@ class ConstructionDetail extends Component {
 }
 
 ConstructionDetail.propTypes = {
-  logout: PropTypes.func
+  logout: PropTypes.func,
+  params: PropTypes.object
 }
 
 const mapStateToProps = ({ user }) => ({

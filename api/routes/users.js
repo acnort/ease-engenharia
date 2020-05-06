@@ -1,8 +1,9 @@
 const express = require('express');
-const router = express.Router();
 const connection = require('../connection');
 const authService = require('../services/auth-service');
 const dateUtils = require('../utils/date-utils')
+
+const router = express.Router();
 
 // Get all users
 router.get('/', authService.verifyToken, (req, res, next) => {

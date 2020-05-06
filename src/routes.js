@@ -5,10 +5,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import PropTypes from 'prop-types';
 
+import Colors from '~/utils/colors'
+
 import {
   Login,
   ConstructionList,
-  ConstructionDetail
+  ConstructionDetail,
+  CreateNewConstruction
 } from '~/pages';
 
 import { screenOptions, tabBarOptions } from '~/utils/navigation'
@@ -46,7 +49,9 @@ class Routes extends Component {
                     screenOptions={{
                       headerMode: 'float',
                       headerTitleAlign: 'center',
+                      headerTintColor: Colors.white,
                       headerStyle: {
+                        backgroundColor: Colors.darkMain,
                         shadowOpacity: 0,
                         shadowOffset: {
                           height: 0,
@@ -63,6 +68,14 @@ class Routes extends Component {
                     <Stack.Screen
                       name="ConstructionDetail"
                       component={ConstructionDetail}
+                      options={({ route }) => ({
+                        title: route.params.construction.name || 'Detalhe',
+                        gestureEnabled: true
+                      })}
+                    />
+                    <Stack.Screen
+                      name="CreateNewConstruction"
+                      component={CreateNewConstruction}
                       options={{
                         gestureEnabled: true
                       }}

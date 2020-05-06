@@ -1,5 +1,5 @@
-import { RESET_STATE } from '@redux-offline/redux-offline/lib/constants';
-import { AsyncStorage } from 'react-native';
+// import { RESET_STATE } from '@redux-offline/redux-offline/lib/constants';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '~/api'
 
@@ -46,6 +46,14 @@ const onSignIn = (token) => AsyncStorage.setItem('JWT', token)
 const onSignOut = () => AsyncStorage.removeItem('JWT')
 
 export const login = (values) => (dispatch) => {
+  // tirar
+  if (values) {
+    dispatch({ type: LOGIN_SUCCESS, payload: { token: 'aaa' } })
+    onSignIn('aaa')
+    return true
+  }
+  // tirar
+
   api.post('/login', values)
     .then(async (resp) => {
       dispatch({ type: LOGIN_SUCCESS, payload: resp.data })
@@ -55,6 +63,9 @@ export const login = (values) => (dispatch) => {
     .catch((error) => {
       dispatch({ type: LOGIN_ERROR, error: error.response.data })
     })
+  // tirar
+  return false
+  // tirar
 }
 
 export const logout = () => (dispatch) => {

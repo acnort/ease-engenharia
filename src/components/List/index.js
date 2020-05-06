@@ -3,34 +3,37 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  Text,
-  FlatList,
-  TouchableOpacity
-} from 'react-native';
+  FlatList
+} from 'react-native'
 
-import Icon from 'react-native-vector-icons/Ionicons'
+import {
+  CreateButton,
+  ListItem
+} from '~/components'
 
 import styles from './styles'
 
-class Constructions extends Component {
-  handlePress = () => {
+class List extends Component {
+  handlePress = (item) => {
     const { handlePress } = this.props
-    handlePress()
+    handlePress(item)
   }
 
   renderItem = ({ item, index }) => {
-    console.warn(item)
+    const { items, createButtonAction } = this.props
+
+    if (index === items.length - 1) {
+      return (
+        <CreateButton
+          options={{
+            title: 'Nova Obra',
+            handlePress: () => createButtonAction()
+          }}
+        />
+      )
+    }
     return (
-      <TouchableOpacity
-        style={[styles.listItem, {
-          borderLeftWidth: 6,
-          borderLeftColor: '#000'
-        }]}
-        onPress={this.handlePress}
-      >
-        <Text>{`${item.name} ${index}`}</Text>
-        <Icon name='md-open' size={20} />
-      </TouchableOpacity>
+      <ListItem item={item} handlePress={(construction) => this.handlePress(construction)} />
     )
   }
 
@@ -61,9 +64,10 @@ class Constructions extends Component {
   }
 }
 
-Constructions.propTypes = {
+List.propTypes = {
   items: PropTypes.array,
-  handlePress: PropTypes.func
+  handlePress: PropTypes.func,
+  createButtonAction: PropTypes.func,
 }
 
-export default Constructions;
+export default List;

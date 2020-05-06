@@ -1,12 +1,12 @@
-import { baseURL } from '~/api'
+import api from '~/api'
+import * as token from '~/utils/token'
 
 const GET_CONSTRUCTIONS = 'GET_CONSTRUCTIONS'
-// const GET_CONSTRUCTIONS_SUCCESS = 'GET_CONSTRUCTIONS_SUCCESS'
-// const GET_CONSTRUCTIONS_ERROR = 'GET_CONSTRUCTIONS_ERROR'
-const GET_CONSTRUCTIONS_FAKE = 'GET_CONSTRUCTIONS_ERROR'
+const GET_CONSTRUCTIONS_SUCCESS = 'GET_CONSTRUCTIONS_SUCCESS'
+const GET_CONSTRUCTIONS_ERROR = 'GET_CONSTRUCTIONS_ERROR'
 
 const INITIAL_STATE = {
-  list: [],
+  data: [],
 };
 
 const constructionReducer = (state = INITIAL_STATE, action) => {
@@ -14,25 +14,19 @@ const constructionReducer = (state = INITIAL_STATE, action) => {
     case GET_CONSTRUCTIONS:
       return { ...state }
 
-    // case GET_CONSTRUCTIONS_SUCCESS:
-    //   return {
-    //     ...state,
-    //     constructions: [
-    //       ...state.constructions,
-    //       action.payload.data.name
-    //     ],
-    //   }
-
-    // case GET_CONSTRUCTIONS_ERROR:
-    //   return {
-    //     ...state,
-    //     error: action.error
-    //   }
-
-    case GET_CONSTRUCTIONS_FAKE:
+    case GET_CONSTRUCTIONS_SUCCESS:
       return {
         ...state,
-        list: action.payload
+        data: [
+          ...state.data,
+          action.payload.data
+        ],
+      }
+
+    case GET_CONSTRUCTIONS_ERROR:
+      return {
+        ...state,
+        error: action.error
       }
 
     default:
@@ -56,20 +50,18 @@ const constructionReducer = (state = INITIAL_STATE, action) => {
 //   }
 // )
 
-// FAKE
-const getConstructionsAction = () => (
-  {
-    type: GET_CONSTRUCTIONS_FAKE,
-    payload: [
-      { id: 0, name: 'Obra' },
-      { id: 1, name: 'Obra' },
-      { id: 2, name: 'Obra' },
-    ]
-  }
-)
+export const getConstructions = () => async (dispatch) => {
+  const jwt = await token.getToken()
 
-export const getConstructions = (construction) => (dispatch) => {
-  dispatch(getConstructionsAction(construction));
+  api.get('/constructions', {
+    headers: { Authorization: `Bearer ${jwt}` }
+  })
+    .then(async (resp) => {
+      dispatch({ type: GET_CONSTRUCTIONS_SUCCESS, payload: resp.data })
+    })
+    .catch((error) => {
+      dispatch({ type: GET_CONSTRUCTIONS_ERROR, error: error.response.data })
+    })
 }
 
 

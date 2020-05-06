@@ -1,19 +1,19 @@
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'easeengenharia',
-    multipleStatements: true
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'sys',
+  multipleStatements: true
 });
 
-connection.connect(error => {
-    if (!error) {
-        console.log('DB connection succeded');
-    } else {
-        console.log('DB connection failed', JSON.stringify(error, undefined, 2));
-    }
+connection.connect((error) => {
+  if (!error) {
+    console.log('DB connection succeded');
+  } else {
+    console.log('DB connection failed', JSON.stringify(error, undefined, 2));
+  }
 });
 
 module.exports = connection;

@@ -9,6 +9,8 @@ import {
 
 import PropTypes from 'prop-types';
 
+import Colors from '~/utils/colors'
+
 // import { Header } from '~/components'
 
 import styles from './styles'
@@ -20,8 +22,8 @@ class Container extends Component {
     return (
       <>
         <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#fff"
+          barStyle="light-content"
+          backgroundColor={Colors.darkMain}
         />
         <SafeAreaView style={styles.safeAreaView}>
           {/* <Header /> */}

@@ -5,6 +5,7 @@ const Colors = {
   border: '#ddd',
   white: '#fff',
   lightBg: '#f3f3f3',
+  softBg: '#f9f9f9',
 };
 
 export default Colors

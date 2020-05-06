@@ -11,7 +11,7 @@ import * as constructionActions from '~/ducks/Construction';
 
 import {
   Container,
-  Constructions
+  List
 } from '~/components'
 
 import styles from './styles'
@@ -21,10 +21,10 @@ class ConstructionList extends Component {
     this.getConstructions()
   }
 
-  handlePress = () => {
+  handlePress = (construction) => {
     const { navigation: { navigate } } = this.props
-    console.warn(this.props)
-    navigate('ConstructionDetail')
+
+    navigate('ConstructionDetail', { construction })
   }
 
   getConstructions = async () => {
@@ -38,12 +38,17 @@ class ConstructionList extends Component {
   }
 
   render() {
-    const { construction } = this.props
-    console.warn(construction)
+    const { construction, navigation } = this.props
+
     return (
       <Container>
         <View style={styles.body}>
-          <Constructions items={construction.list} handlePress={this.handlePress} />
+          <List
+            items={construction.list}
+            handlePress={this.handlePress}
+            navigation={navigation}
+            createButtonAction={() => navigation.navigate('CreateNewConstruction')}
+          />
         </View>
       </Container>
     )
