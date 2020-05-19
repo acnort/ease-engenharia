@@ -10,7 +10,7 @@ import Colors from '~/utils/colors'
 import {
   Login,
   ConstructionList,
-  ConstructionDetail,
+  ConstructionFloors,
   CreateNewConstruction
 } from '~/pages';
 
@@ -69,10 +69,10 @@ class Routes extends Component {
                       }}
                     />
                     <Stack.Screen
-                      name="ConstructionDetail"
-                      component={ConstructionDetail}
+                      name="ConstructionFloors"
+                      component={ConstructionFloors}
                       options={({ route }) => ({
-                        title: route.params ? route.params.construction.name : 'Detalhe',
+                        title: route.params ? route.params.construction.title : 'Andares',
                         gestureEnabled: true
                       })}
                     />
@@ -87,7 +87,7 @@ class Routes extends Component {
                   </Stack.Navigator>
                 )}
               </Tab.Screen>
-              <Tab.Screen name="Configurações" component={ConstructionDetail} />
+              {/* <Tab.Screen name="Configurações" component={ConstructionDetail} /> */}
             </Tab.Navigator>
           )}
       </NavigationContainer>

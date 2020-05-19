@@ -4,52 +4,50 @@ import { Formik } from 'formik';
 
 import {
   View,
-  Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
+
+import Icon from 'react-native-vector-icons/Ionicons'
 
 import styles from './styles'
 
-class ConstructionForm extends Component {
+class FloorForm extends Component {
   render() {
     const {
       onSubmit,
+      handleCancel,
       initialValues
     } = this.props
 
     return (
       <Formik
-        initialValues={initialValues || { title: '', clientName: '' }}
+        initialValues={initialValues || { title: '' }}
         onSubmit={(values) => onSubmit(values)}
         enableReinitialize
       >
         {({ handleChange, handleSubmit, values }) => (
           <View style={styles.wrapper}>
-            <View style={styles.subtitle}><Text>Infos</Text></View>
             <TextInput
               name='title'
               style={styles.input}
               value={values.title}
-              placeholder='Nome da Obra'
+              placeholder='Nome do Andar'
               textContentType='text'
               keyboardType='default'
               onChangeText={handleChange('title')}
             />
-            <TextInput
-              name='clientName'
-              style={styles.input}
-              value={values.clientName}
-              placeholder='Nome do Cliente'
-              textContentType='text'
-              keyboardType='default'
-              onChangeText={handleChange('clientName')}
-            />
             <TouchableOpacity
               style={styles.button}
+              onPress={() => handleCancel()}
+            >
+              <Icon style={styles.icon} name='md-close' size={20} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.lastButton}
               onPress={handleSubmit}
             >
-              <Text style={styles.buttonText}>Salvar</Text>
+              <Icon style={styles.lastIcon} name='md-add' size={20} />
             </TouchableOpacity>
           </View>
         )}
@@ -58,9 +56,10 @@ class ConstructionForm extends Component {
   }
 }
 
-ConstructionForm.propTypes = {
+FloorForm.propTypes = {
   onSubmit: PropTypes.func,
+  handleCancel: PropTypes.func,
   initialValues: PropTypes.object
 }
 
-export default ConstructionForm
+export default FloorForm

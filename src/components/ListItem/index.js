@@ -54,8 +54,10 @@ class ListItem extends Component {
         >
           <View>
             <Text style={styles.listItemTitle}>{`${item.title}`}</Text>
-            {/* <Text style={styles.listItemText}>{`${item.floors} Andares`}</Text> */}
-            <Text style={styles.listItemText}>20 Andares</Text>
+            <Text style={styles.listItemText}>{item.clientName}</Text>
+            {item.floors && (
+              <Text style={styles.listItemText}>{`${item.floors} Andares`}</Text>
+            )}
           </View>
           {status && statusStyle && (
             <View

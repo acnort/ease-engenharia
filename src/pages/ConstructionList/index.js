@@ -24,7 +24,7 @@ class ConstructionList extends Component {
   handlePress = (construction) => {
     const { navigation: { navigate } } = this.props
 
-    navigate('ConstructionDetail', { construction })
+    navigate('ConstructionFloors', { construction })
   }
 
   getConstructions = async () => {

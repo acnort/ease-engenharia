@@ -60,7 +60,6 @@ export const getConstructions = () => async (dispatch) => {
     headers: { Authorization: `Bearer ${jwt}` }
   })
     .then(async (resp) => {
-      console.warn(resp)
       dispatch({ type: GET_CONSTRUCTIONS_SUCCESS, payload: resp.data.constructions })
     })
     .catch((error) => {

@@ -3,74 +3,76 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  Text,
-  FlatList,
-  TouchableOpacity
+  View,
+  FlatList
 } from 'react-native'
 
-import Icon from 'react-native-vector-icons/Ionicons'
-
 import {
-  CreateButton
+  CreateButton,
+  FloorListItem,
+  FloorForm
 } from '~/components'
 
 import styles from './styles'
 
 class FloorsList extends Component {
-  handlePress = () => {
-    const { handlePress } = this.props
-    handlePress()
+  state = {
+    creating: false
   }
 
-  renderItem = ({ item, index }) => {
-    const { items } = this.props
-    // const { navigation: { navigate } } = this.props
+  handlePress = (item) => {
+    const { handlePress } = this.props
+    handlePress(item)
+  }
 
-    if (index === items.length - 1) {
-      return (
-        <CreateButton
-          options={{
-            title: 'Novo Andar',
-            // handlePress: () => navigate('CreateNewFloor')
-          }}
-        />
-      )
-    }
+  handleSubmit = (values) => {
+    const { constructionId, handleSubmit } = this.props
+    handleSubmit(constructionId, values)
+  }
+
+  renderItem = ({ item }) => {
+    const { navigation } = this.props
+
     return (
-      <TouchableOpacity
-        style={[styles.listItem, {
-          borderLeftWidth: 6,
-          borderLeftColor: '#000'
-        }]}
-        onPress={this.handlePress}
-      >
-        <Text>{item.name}</Text>
-        <Icon name='md-open' size={20} />
-      </TouchableOpacity>
+      <FloorListItem
+        navigation={navigation}
+        item={item}
+        status='hasRisk'
+        handlePress={(construction) => this.handlePress(construction)}
+      />
     )
   }
 
-
   render() {
     const { items } = this.props
+    const { creating } = this.state
 
     return (
       <>
-        {items && items.length > 0 && (
-          <FlatList
-            data={items}
-            extraData={items}
-            keyExtractor={(item) => `${item.id}`}
-            renderItem={this.renderItem}
-            onEndReached={this.loadMore}
-            onEndReachedThreshold={0.5}
-            // ListFooterComponent={hasNextPage ? this.renderLoader : null}
-            ListFooterComponentStyle={{
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            style={styles.list}
-          />
+        {items && (
+          <View style={styles.list}>
+            <FlatList
+              data={items}
+              extraData={items}
+              keyExtractor={(item) => `${item.id}`}
+              renderItem={this.renderItem}
+              onEndReached={this.loadMore}
+              onEndReachedThreshold={0.5}
+              // ListFooterComponent={hasNextPage ? this.renderLoader : null}
+              ListFooterComponentStyle={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            />
+            {!creating ? (
+              <CreateButton
+                options={{
+                  title: 'Criar andar',
+                  handlePress: () => this.setState({ creating: true })
+                }}
+              />
+            ) : (<FloorForm onSubmit={this.handleSubmit} handleCancel={() => this.setState({ creating: false })} />)}
+          </View>
         )}
       </>
     );
@@ -78,9 +80,11 @@ class FloorsList extends Component {
 }
 
 FloorsList.propTypes = {
+  constructionId: PropTypes.number.isRequired,
   items: PropTypes.array,
   handlePress: PropTypes.func,
-  navigation: PropTypes.object,
+  handleSubmit: PropTypes.func.isRequired,
+  navigation: PropTypes.object
 }
 
 export default FloorsList;
