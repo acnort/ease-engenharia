@@ -14,7 +14,6 @@ import styles from './styles'
 
 class FloorListItem extends Component {
   state = {
-    menuOpened: false,
     statusStyle: false
   }
 
@@ -25,9 +24,9 @@ class FloorListItem extends Component {
     }
   }
 
-  handlePress = (item) => {
+  handlePress = (id) => {
     const { handlePress } = this.props
-    handlePress(item)
+    handlePress(id)
   }
 
   setStatus = () => {
@@ -43,14 +42,14 @@ class FloorListItem extends Component {
   }
 
   render() {
-    const { item, status, navigation } = this.props
-    const { menuOpened, statusStyle } = this.state
+    const { item } = this.props
+    const { statusStyle } = this.state
 
     return (
       <View style={styles.wrapper}>
         <TouchableOpacity
           style={styles.listItem}
-          onPress={() => this.setState({ menuOpened: !menuOpened })}
+          onPress={() => this.handlePress(item.id)}
         >
           <View>
             <Text style={styles.listItemTitle}>{`${item.title}`}</Text>
@@ -66,7 +65,6 @@ class FloorListItem extends Component {
 
 FloorListItem.propTypes = {
   item: PropTypes.object,
-  navigation: PropTypes.object.isRequired,
   handlePress: PropTypes.func,
   status: PropTypes.string
 }

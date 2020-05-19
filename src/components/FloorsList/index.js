@@ -20,9 +20,9 @@ class FloorsList extends Component {
     creating: false
   }
 
-  handlePress = (item) => {
+  handlePress = (id) => {
     const { handlePress } = this.props
-    handlePress(item)
+    handlePress(id)
   }
 
   handleSubmit = (values) => {
@@ -38,7 +38,7 @@ class FloorsList extends Component {
         navigation={navigation}
         item={item}
         status='hasRisk'
-        handlePress={(construction) => this.handlePress(construction)}
+        handlePress={(id) => this.handlePress(id)}
       />
     )
   }

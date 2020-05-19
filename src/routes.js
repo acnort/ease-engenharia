@@ -11,6 +11,7 @@ import {
   Login,
   ConstructionList,
   ConstructionFloors,
+  FloorDetail,
   CreateNewConstruction
 } from '~/pages';
 
@@ -73,6 +74,14 @@ class Routes extends Component {
                       component={ConstructionFloors}
                       options={({ route }) => ({
                         title: route.params ? route.params.construction.title : 'Andares',
+                        gestureEnabled: true
+                      })}
+                    />
+                    <Stack.Screen
+                      name="FloorDetail"
+                      component={FloorDetail}
+                      options={({ route }) => ({
+                        title: route.params ? route.params.construction.title : 'Andar',
                         gestureEnabled: true
                       })}
                     />

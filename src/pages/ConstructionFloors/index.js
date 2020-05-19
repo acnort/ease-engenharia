@@ -31,6 +31,13 @@ class ConstructionFloors extends Component {
     }
   }
 
+  handlePress = (id) => {
+    const { route, navigation } = this.props
+    const { params: { construction } } = { ...route }
+
+    navigation.navigate('FloorDetail', { id, construction })
+  }
+
   submitFloor = async (id, values) => {
     const { route, createFloor } = this.props
 
@@ -43,7 +50,7 @@ class ConstructionFloors extends Component {
   }
 
   render() {
-    const { route, floor } = this.props
+    const { route, floor, navigation } = this.props
 
     return (
       <Container>
@@ -53,6 +60,8 @@ class ConstructionFloors extends Component {
               constructionId={route.params.construction.id}
               items={floor.data}
               handleSubmit={this.submitFloor}
+              handlePress={this.handlePress}
+              navigation={navigation}
             />
           )}
         </View>
@@ -64,6 +73,7 @@ class ConstructionFloors extends Component {
 ConstructionFloors.propTypes = {
   route: PropTypes.object,
   floor: PropTypes.object,
+  navigation: PropTypes.object,
   getFloors: PropTypes.func,
   createFloor: PropTypes.func
 }

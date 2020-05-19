@@ -5,45 +5,50 @@ const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderTopLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    overflow: 'hidden'
   },
   input: {
-    borderWidth: 1,
     backgroundColor: Colors.white,
-    borderColor: Colors.lightGray,
-    borderBottomLeftRadius: 100,
-    borderTopLeftRadius: 100,
-    height: 54,
+    // borderBottomLeftRadius: 100,
+    // borderTopLeftRadius: 100,
+    height: 80,
     fontSize: 16,
     paddingHorizontal: 20,
     flexGrow: 1
   },
   button: {
-    backgroundColor: Colors.danger,
-    height: 54,
+    backgroundColor: Colors.white,
+    height: 80,
     fontSize: 16,
     paddingHorizontal: 20,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderLeftWidth: 1,
+    borderLeftColor: Colors.border,
   },
   lastButton: {
-    borderBottomRightRadius: 100,
-    borderTopRightRadius: 100,
-    backgroundColor: Colors.darkMain,
-    height: 54,
+    // borderBottomRightRadius: 100,
+    // borderTopRightRadius: 100,
+    borderLeftWidth: 1,
+    borderLeftColor: Colors.border,
+    backgroundColor: Colors.white,
+    height: 80,
     fontSize: 16,
     paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center'
   },
   buttonText: {
-    color: Colors.white
+    color: Colors.danger,
   },
   icon: {
-    color: Colors.white
+    color: Colors.danger
   },
   lastIcon: {
-    color: Colors.white
+    color: Colors.lightMain
   }
 })
 
