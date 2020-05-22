@@ -153,7 +153,7 @@ router.get('/:id/floors/:floorId/items', authService.verifyToken, (req, res, nex
     let query = 'SELECT * FROM item WHERE floorId = ?';
 
     if(req.query.search){
-        query += ' AND title LIKE ? ORDER BY id DESC LIMIT 1'
+        query += ' AND title LIKE ? GROUP BY title'
     }
 
     connection.query(query, [req.params.floorId, '%' + req.query.search + '%'], (error, rows, fields) => {
