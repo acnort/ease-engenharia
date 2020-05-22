@@ -150,9 +150,13 @@ router.get('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
 
 //Get items by floor
 router.get('/:id/floors/:floorId/items', authService.verifyToken, (req, res, next) => {
-    const query = 'SELECT * FROM item WHERE floorId = ?';
+    let query = 'SELECT * FROM item WHERE floorId = ?';
 
-    connection.query(query, [req.params.floorId], (error, rows, fields) => {
+    if(req.query.search){
+        query += ' AND title LIKE ? ORDER BY id DESC LIMIT 1'
+    }
+
+    connection.query(query, [req.params.floorId, '%' + req.query.search + '%'], (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
@@ -300,9 +304,7 @@ router.post('/:id/floors/:floorId/items', authService.verifyToken, (req, res, ne
     const created = dateUtils.getCurrentDate();
     const query = 'INSERT INTO item(`floorId`, `title`, `observation`, `rating`, `image`, `created`) VALUES (?, ?, ?, ?, ?, ?)';
 
-    let image = '';
-
-    connection.query(query, [req.params.floorId, post.title, post.observation, post.rating, image, created], (error, rows, fields) => {
+    connection.query(query, [req.params.floorId, post.title, post.observation, post.rating, post.image, created], (error, rows, fields) => {
         if (!error) {
             res.status(201).send({ id: rows.insertId });
         }
