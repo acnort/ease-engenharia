@@ -151,12 +151,19 @@ router.get('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
 //Get items by floor
 router.get('/:id/floors/:floorId/items', authService.verifyToken, (req, res, next) => {
     let query = 'SELECT * FROM item WHERE floorId = ?';
+    let params = [req.params.floorId];
 
     if(req.query.search){
-        query += ' AND title LIKE ? GROUP BY title'
+        query = 'SELECT title FROM item WHERE floorId = ? AND title LIKE ? GROUP BY title'
+        params.push('%' + req.query.search + '%');
     }
 
-    connection.query(query, [req.params.floorId, '%' + req.query.search + '%'], (error, rows, fields) => {
+    if(req.query.title){
+        query = 'SELECT * FROM item WHERE floorId = ? AND title = ? ORDER BY id DESC LIMIT 1'
+        params.push(req.query.title);
+    }
+
+    connection.query(query, params, (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
