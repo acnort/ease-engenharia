@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Colors from '~/utils/colors'
 
 const styles = StyleSheet.create({
   engine: {
@@ -24,6 +25,19 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+  },
+  image: {
+    height: 200,
+    width: 200,
+    borderRadius: 200,
+    backgroundColor: Colors.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    marginBottom: 15
+  },
+  icon: {
+    color: Colors.lightMain
   }
 })
 

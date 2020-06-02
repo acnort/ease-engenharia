@@ -13,6 +13,8 @@ import { effect, discard } from '~/api'
 import reducers from '~/ducks/reducers'
 import Routes from '~/routes'
 
+console.disableYellowBox = true;
+
 const store = createStore(
   reducers,
   compose(

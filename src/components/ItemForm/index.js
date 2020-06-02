@@ -18,32 +18,46 @@ class Item extends Component {
       initialValues
     } = this.props
 
+    const initial = {
+      title: '',
+      observation: '',
+      rating: ''
+    }
+
     return (
       <Formik
-        initialValues={initialValues || { title: '', clientName: '' }}
+        initialValues={initialValues || initial}
         onSubmit={(values) => onSubmit(values)}
         enableReinitialize
       >
         {({ handleChange, handleSubmit, values }) => (
           <View style={styles.wrapper}>
-            <View style={styles.subtitle}><Text>Infos</Text></View>
             <TextInput
               name='title'
               style={styles.input}
               value={values.title}
-              placeholder='Nome da Obra'
+              placeholder='Legenda'
               textContentType='text'
               keyboardType='default'
               onChangeText={handleChange('title')}
             />
             <TextInput
-              name='clientName'
+              name='observation'
               style={styles.input}
-              value={values.clientName}
-              placeholder='Nome do Cliente'
+              value={values.observation}
+              placeholder='Observação'
               textContentType='text'
               keyboardType='default'
-              onChangeText={handleChange('clientName')}
+              onChangeText={handleChange('observation')}
+            />
+            <TextInput
+              name='rating'
+              style={styles.input}
+              value={values.rating}
+              placeholder='Risco'
+              textContentType='text'
+              keyboardType='default'
+              onChangeText={handleChange('rating')}
             />
             <TouchableOpacity
               style={styles.button}

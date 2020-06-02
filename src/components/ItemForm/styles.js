@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: Colors.white,
     borderColor: Colors.lightGray,
-    borderRadius: 100,
+    borderRadius: 4,
     height: 54,
     fontSize: 16,
     paddingHorizontal: 20,
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   button: {
-    borderRadius: 100,
+    borderRadius: 4,
     backgroundColor: Colors.darkMain,
     height: 54,
     fontSize: 16,

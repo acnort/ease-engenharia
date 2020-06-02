@@ -4,8 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  View,
-  Text
+  View
 } from 'react-native';
 
 import * as itemActions from '~/ducks/Floor';
@@ -22,8 +21,15 @@ class FloorDetail extends Component {
     }
   }
 
+  handlePress = (id) => {
+    const { route, navigation } = this.props
+    const { params: { item } } = { ...route }
+
+    navigation.navigate('CreateEditItem', { id, item })
+  }
+
   render() {
-    const { floor } = this.props
+    const { floor, navigation } = this.props
 
     return (
       <Container>
@@ -48,6 +54,7 @@ class FloorDetail extends Component {
             ]}
             handleSubmit={this.submitFloor}
             handlePress={this.handlePress}
+            navigation={navigation}
           />
         </View>
       </Container>
@@ -57,7 +64,8 @@ class FloorDetail extends Component {
 
 FloorDetail.propTypes = {
   route: PropTypes.object,
-  floor: PropTypes.object
+  floor: PropTypes.object,
+  navigation: PropTypes.object,
 }
 
 const mapStateToProps = ({ user, floor }) => ({

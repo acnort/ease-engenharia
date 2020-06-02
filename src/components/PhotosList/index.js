@@ -17,10 +17,6 @@ import {
 import styles from './styles'
 
 class PhotosList extends Component {
-  state = {
-    creating: false
-  }
-
   handlePress = (id) => {
     const { handlePress } = this.props
     handlePress(id)
@@ -45,8 +41,7 @@ class PhotosList extends Component {
   }
 
   render() {
-    const { items, title } = this.props
-    const { creating } = this.state
+    const { items, title, navigation } = this.props
 
     return (
       <>
@@ -66,14 +61,12 @@ class PhotosList extends Component {
                 justifyContent: 'center',
               }}
             />
-            {!creating ? (
-              <CreateButton
-                options={{
-                  title: 'Adicionar item',
-                  handlePress: () => this.setState({ creating: true })
-                }}
-              />
-            ) : (<FloorForm onSubmit={this.handleSubmit} handleCancel={() => this.setState({ creating: false })} />)}
+            <CreateButton
+              options={{
+                title: 'Adicionar item',
+                handlePress: () => navigation.navigate('CreateEditItem')
+              }}
+            />
           </View>
         )}
       </>

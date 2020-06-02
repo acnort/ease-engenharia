@@ -12,7 +12,8 @@ import {
   ConstructionList,
   ConstructionFloors,
   FloorDetail,
-  CreateNewConstruction
+  CreateNewConstruction,
+  CreateEditItem
 } from '~/pages';
 
 import { screenOptions, tabBarOptions } from '~/utils/navigation'
@@ -90,6 +91,14 @@ class Routes extends Component {
                       component={CreateNewConstruction}
                       options={({ route }) => ({
                         title: (route.params && route.params.construction) ? 'Editar Obra' : 'Nova Obra',
+                        gestureEnabled: true
+                      })}
+                    />
+                    <Stack.Screen
+                      name="CreateEditItem"
+                      component={CreateEditItem}
+                      options={({ route }) => ({
+                        title: (route.params && route.params.item) ? 'Editar Item' : 'Novo Item',
                         gestureEnabled: true
                       })}
                     />

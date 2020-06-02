@@ -176,6 +176,10 @@ android {
 
         }
     }
+
+    dexOptions {
+      jumboMode = true
+    }
 }
 
 dependencies {
@@ -204,3 +208,7 @@ task copyDownloadableDepsToLibs(type: Copy) {
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+dependencies {
+    implementation project(':react-native-image-picker')
+}
