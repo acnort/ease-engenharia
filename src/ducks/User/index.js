@@ -41,16 +41,19 @@ const userReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-const onSignIn = (token) => AsyncStorage.setItem('JWT', token)
+const onSignIn = (token) => {
+  api.defaults.headers.common.Authorization = `Bearer ${token}`
+  return AsyncStorage.setItem('JWT', token)
+}
 
 const onSignOut = () => AsyncStorage.clear()
 
 export const login = (values) => (dispatch) => {
   api.post('/login', values)
     .then(async (resp) => {
-      dispatch({ type: LOGIN_SUCCESS, payload: resp.data })
-
       if (resp.data.token) await onSignIn(resp.data.token)
+
+      dispatch({ type: LOGIN_SUCCESS, payload: resp.data })
     })
     .catch((error) => {
       dispatch({ type: LOGIN_ERROR, error: error.response.data })

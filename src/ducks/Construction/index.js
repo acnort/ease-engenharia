@@ -53,12 +53,9 @@ const constructionReducer = (state = INITIAL_STATE, action) => {
 // )
 
 export const getConstructions = () => async (dispatch) => {
-  const jwt = await token.getToken()
   dispatch({ type: GET_CONSTRUCTIONS, payload: {} })
 
-  api.get('/constructions', {
-    headers: { Authorization: `Bearer ${jwt}` }
-  })
+  api.get('/constructions')
     .then(async (resp) => {
       dispatch({ type: GET_CONSTRUCTIONS_SUCCESS, payload: resp.data.constructions })
     })
@@ -68,12 +65,9 @@ export const getConstructions = () => async (dispatch) => {
 }
 
 export const createConstruction = (values) => async (dispatch) => {
-  const jwt = await token.getToken()
   dispatch({ type: CREATE_CONSTRUCTION, payload: {} })
 
-  api.post('/constructions', values, {
-    headers: { Authorization: `Bearer ${jwt}` }
-  })
+  api.post('/constructions', values)
     .then(async (resp) => {
       dispatch({ type: CREATE_CONSTRUCTION_SUCCESS, payload: resp.data })
     })
@@ -83,13 +77,10 @@ export const createConstruction = (values) => async (dispatch) => {
 }
 
 export const editConstruction = (values) => async (dispatch) => {
-  const jwt = await token.getToken()
   const { id, ...rest } = values
   dispatch({ type: EDIT_CONSTRUCTION, payload: {} })
 
-  api.put(`/constructions/${id}`, rest, {
-    headers: { Authorization: `Bearer ${jwt}` }
-  })
+  api.put(`/constructions/${id}`, rest)
     .then(async (resp) => {
       dispatch({ type: EDIT_CONSTRUCTION_SUCCESS, payload: resp.data })
     })

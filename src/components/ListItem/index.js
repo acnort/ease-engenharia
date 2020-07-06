@@ -87,7 +87,7 @@ class ListItem extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.menuItem}
-              onPress={() => navigation.navigate('CreateNewConstruction', { construction: item })}
+              onPress={() => navigation.navigate('Reports', { construction: item })}
             >
               <Text style={styles.menuItemText}>Relatórios</Text>
             </TouchableOpacity>

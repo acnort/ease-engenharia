@@ -13,7 +13,8 @@ import {
   ConstructionFloors,
   FloorDetail,
   CreateNewConstruction,
-  CreateEditItem
+  CreateEditItem,
+  Reports
 } from '~/pages';
 
 import { screenOptions, tabBarOptions } from '~/utils/navigation'
@@ -101,6 +102,14 @@ class Routes extends Component {
                         title: (route.params && route.params.item) ? 'Editar Item' : 'Novo Item',
                         gestureEnabled: true
                       })}
+                    />
+                    <Stack.Screen
+                      name="Reports"
+                      component={Reports}
+                      options={{
+                        title: 'Relatórios',
+                        gestureEnabled: true
+                      }}
                     />
                   </Stack.Navigator>
                 )}

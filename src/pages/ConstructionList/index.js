@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import * as constructionActions from '~/ducks/Construction';
+import * as userActions from '~/ducks/User'
 
 import {
   Container,
@@ -18,6 +19,9 @@ import styles from './styles'
 
 class ConstructionList extends Component {
   componentDidMount() {
+    // const { logout } = this.props
+
+    // logout()
     this.getConstructions()
   }
 
@@ -67,10 +71,12 @@ const mapStateToProps = ({ construction }) => ({
 
 const mapDispatchToProps = (dispatch) => {
   const { getConstructions } = constructionActions
+  const { logout } = userActions
 
   return (
     bindActionCreators({
       getConstructions,
+      logout
     }, dispatch)
   )
 }
