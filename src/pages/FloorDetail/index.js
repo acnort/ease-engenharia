@@ -23,9 +23,9 @@ class FloorDetail extends Component {
 
   handlePress = (id) => {
     const { route, navigation } = this.props
-    const { params: { item } } = { ...route }
+    const { params } = { ...route }
 
-    navigation.navigate('CreateEditItem', { id, item })
+    navigation.navigate('CreateEditItem', { floorId: params.id, constructionId: params.construction.id })
   }
 
   render() {
@@ -38,6 +38,7 @@ class FloorDetail extends Component {
             title={floor.title || 'Nome do Andar'}
             items={[
               {
+                id: 1,
                 image: 'https://specials-images.forbesimg.com/imageserve/5c0077cc31358e5b43383ffc/960x0.jpg?fit=scale',
                 subtitle: 'Legenda',
                 obs: 'observação',
@@ -45,6 +46,7 @@ class FloorDetail extends Component {
                 valid: false
               },
               {
+                id: 2,
                 image: 'https://specials-images.forbesimg.com/imageserve/5c0077cc31358e5b43383ffc/960x0.jpg?fit=scale',
                 subtitle: 'Legenda 2',
                 obs: 'observação 2',

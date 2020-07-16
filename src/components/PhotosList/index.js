@@ -42,7 +42,7 @@ class PhotosList extends Component {
 
   render() {
     const { items, title, navigation } = this.props
-
+    console.warn(this.props)
     return (
       <>
         {items && (
@@ -64,7 +64,7 @@ class PhotosList extends Component {
             <CreateButton
               options={{
                 title: 'Adicionar item',
-                handlePress: () => navigation.navigate('CreateEditItem')
+                handlePress: this.handlePress
               }}
             />
           </View>

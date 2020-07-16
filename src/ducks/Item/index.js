@@ -37,12 +37,9 @@ const itemReducer = (state = INITIAL_STATE, action) => {
 };
 
 export const getItems = (constructionId, floorId) => async (dispatch) => {
-  const jwt = await token.getToken()
   dispatch({ type: GET_ITEMS, payload: {} })
 
-  api.get(`/constructions/${constructionId}/floors/${floorId}`, {
-    headers: { Authorization: `Bearer ${jwt}` }
-  })
+  api.get(`/constructions/${constructionId}/floors/${floorId}`)
     .then(async (resp) => {
       dispatch({ type: GET_ITEMS_SUCCESS, payload: resp.data.floors })
     })
@@ -52,12 +49,9 @@ export const getItems = (constructionId, floorId) => async (dispatch) => {
 }
 
 export const createItem = (constructionId, floorId, values) => async (dispatch) => {
-  const jwt = await token.getToken()
   dispatch({ type: CREATE_ITEM, payload: {} })
 
-  api.post(`/constructions/${constructionId}/floors/${floorId}`, values, {
-    headers: { Authorization: `Bearer ${jwt}` }
-  })
+  api.post(`/constructions/${constructionId}/floors/${floorId}/items`, values)
     .then(async (resp) => {
       dispatch({ type: CREATE_ITEM_SUCCESS, payload: resp.data })
     })

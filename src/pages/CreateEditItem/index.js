@@ -46,13 +46,13 @@ class CreateEditItem extends Component {
     ImagePicker.showImagePicker(options, (response) => {
       console.warn(response)
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        console.log('User cancelled image picker')
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        console.log('ImagePicker Error: ', response.error)
       } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+        console.log('User tapped custom button: ', response.customButton)
       } else {
-        const source = { uri: response.uri };
+        const source = response
 
         this.setState({
           photoSource: source,
@@ -62,26 +62,33 @@ class CreateEditItem extends Component {
   }
 
   onSubmit = (values) => {
-    // const {
-    //   createItem,
-    //   editItem,
-    //   navigation: { navigate },
-    //   route
-    // } = this.props
+    const {
+      createItem,
+      editItem,
+      navigation,
+      route: { params }
+    } = this.props
+    console.warn(this.props)
+    const { photoSource } = this.state
 
-    // if (route.params && route.params.item) {
-    //   editItem(values)
-    // } else {
-    //   createItem(values)
-    // }
+    const updatedValues = {
+      ...values,
+      image: photoSource.data
+    }
 
-    // navigate('FloorDetail')
-    this.props.navigation.goBack()
+    if (params && params.item) {
+      editItem(params.constructionId, params.floorId, updatedValues)
+    } else {
+      createItem(params.constructionId, params.floorId, updatedValues)
+    }
+
+    // navigation.navigate('FloorDetail')
+    navigation.goBack()
   }
 
   render() {
     const { initialValues, photoSource } = this.state
-    console.warn(photoSource)
+
     return (
       <Container hasScrollView>
         <View style={styles.body}>
