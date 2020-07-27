@@ -1,8 +1,25 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const connection = require('../connection');
 const authService = require('../services/auth-service');
 const dateUtils = require('../utils/date-utils');
+const { Storage } = require('@google-cloud/storage');
+const Multer = require('multer');
+
+const storage = new Storage({
+    projectId: "ease-app-49229",
+    keyFilename: path.join(__dirname, "../ease-app-49229-firebase-adminsdk-ese96-90b58830d3.json")
+});
+
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
+    }
+});
+
+const bucket = storage.bucket('gs://ease-app-49229.appspot.com/');
 
 //#region GET
 
@@ -25,7 +42,7 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
 
     connection.query(query, [req.params.id], (error, rows, fields) => {
         if (!error) {
-            if(rows.length > 0){
+            if (rows.length > 0) {
                 const construction = {
                     id: rows[0].id,
                     title: rows[0].title,
@@ -36,7 +53,7 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
                 };
 
                 rows.forEach(r => {
-                    if(r.floorId){
+                    if (r.floorId) {
                         construction.floors.push({
                             id: r.floorId,
                             title: r.floorTitle
@@ -46,7 +63,7 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
 
                 res.status(200).send(construction);
             }
-            else{
+            else {
                 res.status(200).send(rows);
             }
         }
@@ -78,10 +95,10 @@ router.get('/:id/reports/:reportId', authService.verifyToken, (req, res, next) =
 
     connection.query(query, [req.params.reportId], (error, rows, fields) => {
         if (!error) {
-            if(rows.length > 0){
+            if (rows.length > 0) {
                 res.status(200).send(rows[0]);
             }
-            else{
+            else {
                 res.status(200).send(rows);
             }
         }
@@ -113,7 +130,7 @@ router.get('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
 
     connection.query(query, [req.params.floorId], (error, rows, fields) => {
         if (!error) {
-            if(rows.length > 0){
+            if (rows.length > 0) {
                 const floor = {
                     id: rows[0].id,
                     constructionId: rows[0].constructionId,
@@ -124,7 +141,7 @@ router.get('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
                 };
 
                 rows.forEach(r => {
-                    if(r.itemId){
+                    if (r.itemId) {
                         floor.items.push({
                             id: r.itemId,
                             title: r.itemTitle,
@@ -137,7 +154,7 @@ router.get('/:id/floors/:floorId', authService.verifyToken, (req, res, next) => 
 
                 res.status(200).send(floor);
             }
-            else{
+            else {
                 res.status(200).send(rows);
             }
         }
@@ -153,12 +170,12 @@ router.get('/:id/floors/:floorId/items', authService.verifyToken, (req, res, nex
     let query = 'SELECT * FROM item WHERE floorId = ?';
     let params = [req.params.floorId];
 
-    if(req.query.search){
+    if (req.query.search) {
         query = 'SELECT title FROM item WHERE floorId = ? AND title LIKE ? GROUP BY title'
         params.push('%' + req.query.search + '%');
     }
 
-    if(req.query.title){
+    if (req.query.title) {
         query = 'SELECT * FROM item WHERE floorId = ? AND title = ? ORDER BY id DESC LIMIT 1'
         params.push(req.query.title);
     }
@@ -180,10 +197,10 @@ router.get('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (req, 
 
     connection.query(query, [req.params.itemId], (error, rows, fields) => {
         if (!error) {
-            if(rows.length > 0){
+            if (rows.length > 0) {
                 res.status(200).send(rows[0]);
             }
-            else{
+            else {
                 res.status(200).send(rows);
             }
         }
@@ -411,5 +428,57 @@ router.put('/:id/floors/:floorId/items/:itemId', authService.verifyToken, (req, 
 });
 
 //#endregion PUT
+
+/**
+ * Adding new file to the storage
+ */
+router.post('/upload', multer.single('file'), (req, res) => {
+    let file = req.file;
+    let path = req.body.path;
+
+    if (file) {
+        uploadImageToStorage(file, path).then((success) => {
+            res.status(200).send({
+                url: success
+            });
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+});
+
+/**
+ * Upload the image file to Google Storage
+ * @param {File} file object that will be uploaded to Google Storage
+ * @param {string} path
+ */
+const uploadImageToStorage = (file, path) => {
+    return new Promise((resolve, reject) => {
+        if (!file) {
+            reject('No file');
+        }
+
+        let newFileName = `${Date.now()}_${file.originalname}`;
+        let fileUpload = bucket.file(newFileName);
+
+        const blobStream = fileUpload.createWriteStream({
+            metadata: {
+                contentType: file.mimetype
+            }
+        });
+
+        blobStream.on('error', (error) => {
+            console.log(error.response);
+            reject('Something is wrong! Unable to upload at the moment.');
+        });
+
+        blobStream.on('finish', () => {
+            const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${(encodeURI(fileUpload.name)).replace("\/", "%2F")}?alt=media&token=7faf8573-7b8b-46c2-b90e-e3693cf19e8e`;
+            resolve(publicUrl);
+        });
+
+        blobStream.end(file.buffer);
+    });
+}
 
 module.exports = router;
