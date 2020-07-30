@@ -2,11 +2,11 @@ const util = require('util');
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'sys',
-  multipleStatements: true
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'easeengenharia',
+    multipleStatements: true
 });
 
 connection.connect((error) => {
